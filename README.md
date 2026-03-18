@@ -50,7 +50,7 @@ PostFlow apporte :
 ### Frontend
 - Next.js  
 
-> ⚠️ Aucune architecture frontend n’est imposée.
+> ⚠️ Comming Soon
 
 ### Backend
 - Spring Boot  
