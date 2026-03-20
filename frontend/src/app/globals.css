@@ -1,26 +1,118 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* ── Background #f1f5f9 ── */
+    --background: 214 32% 91%;
+    --foreground: 222 47% 11%;
+
+    /* ── Cards ── */
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    /* ── Popover ── */
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* ── Primary #6366f1 ── */
+    --primary: 239 84% 67%;
+    --primary-foreground: 0 0% 100%;
+
+    /* ── Secondary #1e293b ── */
+    --secondary: 215 28% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    /* ── Accent ── */
+    --accent: 239 84% 67%;
+    --accent-foreground: 0 0% 100%;
+
+    /* ── Muted ── */
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    /* ── Destructive ── */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* ── Border + Input ── */
+    --border: 214 32% 85%;
+    --input: 214 32% 85%;
+    --ring: 239 84% 67%;
+
+    /* ── Radius ── */
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* ── Background #0f172a ── */
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+
+    /* ── Cards ── */
+    --card: 222 47% 9%;
+    --card-foreground: 210 40% 98%;
+
+    /* ── Popover ── */
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 98%;
+
+    /* ── Primary #6366f1 — même couleur en dark ── */
+    --primary: 239 84% 67%;
+    --primary-foreground: 0 0% 100%;
+
+    /* ── Secondary ── */
+    --secondary: 215 28% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    /* ── Accent ── */
+    --accent: 239 84% 67%;
+    --accent-foreground: 0 0% 100%;
+
+    /* ── Muted ── */
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    /* ── Destructive ── */
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* ── Border + Input ── */
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 239 84% 67%;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
 }
