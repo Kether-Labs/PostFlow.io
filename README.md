@@ -1,6 +1,10 @@
 <div align="center">
 
-# PostFlow.io
+<img width="735" height="237" alt="postflow" src="https://github.com/user-attachments/assets/6891e2d6-c317-41a3-88e9-bbf9a84e87f8" />
+
+
+
+
 
 **Plateforme SaaS open source de gestion et d'automatisation des publications sur les réseaux sociaux**
 
