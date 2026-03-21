@@ -1,0 +1,192 @@
+name: "Good first issue"
+description: "Créer une tâche accessible pour les nouveaux contributeurs PostFlow.io"
+title: "feat(scope): "
+labels: ["good first issue"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > **Pour les Leads uniquement.**
+        > Ce template est destiné à créer des issues bien documentées et accessibles
+        > aux nouveaux contributeurs. Remplissez chaque champ avec suffisamment de détails
+        > pour qu'un contributeur débutant puisse commencer **sans aide supplémentaire**.
+
+  - type: dropdown
+    id: partie
+    attributes:
+      label: "Partie concernée"
+      options:
+        - "🟩 Frontend — Next.js / TypeScript / React"
+        - "🟦 Backend — Spring Boot / Java"
+        - "🐳 Infrastructure — Docker / CI/CD"
+        - "📝 Documentation"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: "Module concerné"
+      options:
+        - "Authentification — login / register / logout"
+        - "Dashboard"
+        - "Posts — création / édition"
+        - "Planification"
+        - "Publication automatique"
+        - "Connexion réseaux sociaux"
+        - "Médias"
+        - "Profil utilisateur"
+        - "Tests"
+        - "Documentation"
+        - "CI/CD"
+        - "Composants UI — shadcn/ui"
+        - "Mocks — données de développement"
+        - "Autre"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: niveau
+    attributes:
+      label: "Niveau requis"
+      description: "Quel niveau technique est nécessaire pour cette tâche ?"
+      options:
+        - "Débutant — HTML / CSS / Tailwind / documentation"
+        - "Débutant JavaScript / TypeScript"
+        - "Débutant Java / Spring Boot"
+        - "Intermédiaire React / Next.js"
+        - "Intermédiaire Spring Boot / JPA"
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: "Contexte — pourquoi cette tâche existe"
+      description: "Expliquez le besoin de façon simple. Pas de jargon."
+      placeholder: |
+        Exemple (Frontend) :
+        Les utilisateurs voient actuellement un écran blanc pendant
+        le chargement des données. On veut afficher un spinner
+        pour améliorer l'expérience utilisateur.
+
+        Exemple (Backend) :
+        L'endpoint GET /api/posts ne retourne pas les posts dans
+        l'ordre chronologique. On doit ajouter un tri par date
+        de planification.
+    validations:
+      required: true
+
+  - type: textarea
+    id: task
+    attributes:
+      label: "La tâche précise à réaliser"
+      description: "Soyez très spécifique. Listez exactement ce qui est attendu."
+      placeholder: |
+        Exemple (Frontend) :
+        1. Créer le composant src/components/ui/Spinner/Spinner.tsx
+        2. Props : size (sm | md | lg), className optionnel
+        3. Utiliser les classes Tailwind : animate-spin, rounded-full, border-accent
+        4. Créer Spinner.types.ts avec l'interface SpinnerProps
+        5. Créer index.ts avec l'export
+        6. Utiliser ce Spinner dans LoginForm.tsx pendant isPending
+
+        Exemple (Backend) :
+        1. Dans PostRepository.java, ajouter :
+           List<Post> findByUserIdOrderByScheduledAtAsc(String userId);
+        2. Mettre à jour PostService.getUserPosts() pour utiliser cette méthode
+        3. Écrire le test unitaire dans PostServiceTest.java
+    validations:
+      required: true
+
+  - type: textarea
+    id: code_example
+    attributes:
+      label: "Exemple de code attendu"
+      description: "Montrez exactement le résultat attendu."
+      placeholder: |
+        // Exemple Frontend — Spinner.tsx
+        interface SpinnerProps {
+          size?: 'sm' | 'md' | 'lg'
+          className?: string
+        }
+
+        export const Spinner = ({ size = 'md', className }: SpinnerProps) => {
+          const sizes = { sm: 'h-4 w-4', md: 'h-6 w-6', lg: 'h-8 w-8' }
+          return (
+            <div className={`animate-spin rounded-full border-2
+                             border-accent border-t-transparent
+                             ${sizes[size]} ${className}`} />
+          )
+        }
+
+        // Utilisation dans LoginForm.tsx
+        {isPending && <Spinner size="sm" />}
+    validations:
+      required: true
+
+  - type: textarea
+    id: files
+    attributes:
+      label: "Fichiers à créer ou modifier"
+      description: "Listez précisément les fichiers concernés."
+      placeholder: |
+        # Fichiers à CRÉER
+        - src/components/ui/Spinner/Spinner.tsx
+        - src/components/ui/Spinner/Spinner.types.ts
+        - src/components/ui/Spinner/index.ts
+
+        # Fichiers à MODIFIER
+        - src/components/features/auth/components/LoginForm/LoginForm.tsx
+          → remplacer le texte "Connexion en cours..." par le composant Spinner
+        - src/components/ui/index.ts
+          → ajouter l'export du Spinner
+    validations:
+      required: true
+
+  - type: textarea
+    id: resources
+    attributes:
+      label: "Ressources utiles"
+      description: "Liens, fichiers similaires déjà dans le projet, documentation."
+      placeholder: |
+        - Composant similaire déjà créé : src/components/ui/Avatar/Avatar.tsx
+        - Doc Tailwind animate-spin : https://tailwindcss.com/docs/animation
+        - Doc shadcn/ui : https://ui.shadcn.com/docs
+        - CONTRIBUTING.md du projet
+        - Guide GitHub du projet (comment créer une branche et une PR)
+    validations:
+      required: false
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: "Critères d'acceptation"
+      description: "Comment saura-t-on que la tâche est terminée et correcte ?"
+      placeholder: |
+        # Frontend
+        - [ ] Le composant Spinner s'affiche correctement dans les 3 tailles
+        - [ ] Il tourne avec l'animation Tailwind animate-spin
+        - [ ] Il est utilisé dans LoginForm pendant isPending
+        - [ ] pnpm build passe sans erreur
+        - [ ] pnpm lint passe sans erreur
+
+        # Backend
+        - [ ] Les posts sont retournés dans l'ordre chronologique
+        - [ ] Le test unitaire passe avec mvn test
+        - [ ] Aucune régression sur les tests existants
+    validations:
+      required: true
+
+  - type: textarea
+    id: branch
+    attributes:
+      label: "Branche à créer"
+      description: "Indiquez le nom de branche recommandé pour cette tâche."
+      placeholder: |
+        feat/frontend/spinner-component
+        # ou
+        fix/backend/posts-ordering
+    validations:
+      required: false

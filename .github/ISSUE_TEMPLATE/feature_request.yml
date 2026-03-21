@@ -1,0 +1,170 @@
+name: "Feature request"
+description: "Proposer une nouvelle fonctionnalité ou une amélioration sur PostFlow.io"
+title: "feat(scope): "
+labels: ["feature"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Avant de soumettre, vérifiez que votre idée n'est pas déjà dans la
+        [Roadmap] ou dans les issues ouvertes.
+        Les nouvelles fonctionnalités sont **discutées avant d'être développées** —
+        attendez la validation d'un Lead avant de coder.
+
+  - type: dropdown
+    id: partie
+    attributes:
+      label: "Partie concernée"
+      description: "Cette fonctionnalité concerne quelle partie du projet ?"
+      multiple: false
+      options:
+        - "🟩 Frontend uniquement — UI / UX / composants"
+        - "🟦 Backend uniquement — API / base de données / scheduler"
+        - "🔗 Les deux — nécessite des changements frontend ET backend"
+        - "🐳 Infrastructure — Docker / CI/CD / déploiement"
+        - "📱 Intégration réseau social — Facebook / LinkedIn / Instagram"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: "Module concerné"
+      description: "À quelle fonctionnalité cette feature appartient-elle ?"
+      multiple: false
+      options:
+        - "Authentification — login / register / sessions"
+        - "Dashboard — vue principale et statistiques"
+        - "Posts — création / édition / gestion"
+        - "Planification — scheduling / calendrier éditorial"
+        - "Publication automatique — workers / retry"
+        - "Connexion réseaux sociaux — OAuth"
+        - "Médias — upload / compression / stockage"
+        - "Assistance IA — génération de contenu"
+        - "Profil & Préférences utilisateur"
+        - "Billing & Plans — abonnements / quotas"
+        - "Notifications — alertes / emails"
+        - "Nouveau module"
+        - "Autre / Infrastructure"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Le problème à résoudre"
+      description: |
+        Décrivez la friction ou la limitation actuelle.
+        Commencez par "En tant que [rôle], je veux... parce que..."
+      placeholder: |
+        En tant que créateur de contenu, je veux pouvoir programmer
+        mes posts directement depuis un calendrier visuel parce qu'actuellement
+        je dois saisir manuellement la date et l'heure dans un formulaire,
+        ce qui est lent et peu intuitif quand je planifie plusieurs posts
+        sur la même semaine.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: "La solution proposée"
+      description: |
+        🟩 Frontend : décrivez l'interface et le comportement attendu.
+        🟦 Backend : décrivez l'endpoint ou la logique métier nécessaire.
+        Montrez du code ou des maquettes si possible.
+      placeholder: |
+        # Frontend
+        Ajouter une vue "Calendrier" dans le dashboard avec :
+        - Affichage mensuel des posts planifiés par case de jour
+        - Glisser-déposer pour reprogrammer un post
+        - Clic sur une case vide → ouvre le formulaire de création
+
+        # Backend
+        Nouvel endpoint : GET /api/posts/calendar?month=2025-01
+        Réponse : liste des posts groupés par date pour le mois demandé
+
+        # Exemple de réponse attendue :
+        {
+          "2025-01-15": [{ "id": "abc", "title": "Post LinkedIn", "status": "SCHEDULED" }],
+          "2025-01-22": [{ "id": "def", "title": "Post Facebook", "status": "DRAFT" }]
+        }
+    validations:
+      required: true
+
+  - type: textarea
+    id: api_contract
+    attributes:
+      label: "Contrat API — si la feature nécessite un nouvel endpoint"
+      description: |
+        Si votre feature nécessite un nouvel endpoint backend,
+        décrivez-le ici. Cela accélère le développement et permet
+        au frontend de préparer les mocks en avance.
+      render: shell
+      placeholder: |
+        # Méthode et URL
+        GET /api/posts/calendar
+
+        # Query params
+        ?month=2025-01  (format YYYY-MM, requis)
+
+        # Réponse 200
+        {
+          "2025-01-15": [
+            { "id": "abc123", "title": "...", "status": "SCHEDULED",
+              "scheduledAt": "2025-01-15T14:30:00Z", "platforms": ["LINKEDIN"] }
+          ]
+        }
+
+        # Erreurs possibles
+        400 — month invalide ou manquant
+        401 — non authentifié
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternatives considérées"
+      description: "Avez-vous envisagé d'autres approches ? Pourquoi ne conviennent-elles pas ?"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: milestone
+    attributes:
+      label: "Milestone cible"
+      description: "Dans quel milestone cette fonctionnalité devrait-elle être livrée ?"
+      options:
+        - "v1.0 — MVP (en cours)"
+        - "v1.5 — Enrichissement"
+        - "v2.0 — Scale"
+        - "Je ne sais pas"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: willing
+    attributes:
+      label: "Souhaitez-vous développer cette fonctionnalité ?"
+      options:
+        - "Oui, je peux l'implémenter (frontend)"
+        - "Oui, je peux l'implémenter (backend)"
+        - "Oui, je peux l'implémenter (les deux)"
+        - "Oui, avec de l'aide"
+        - "Non, je propose l'idée seulement"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: "Vérifications avant de soumettre"
+      options:
+        - label: "J'ai vérifié que cette fonctionnalité n'est pas déjà dans la Roadmap"
+          required: true
+        - label: "J'ai vérifié qu'elle n'a pas déjà été proposée dans les issues"
+          required: true
+        - label: "J'attends la validation d'un Lead avant de commencer à coder"
+          required: true
