@@ -1,6 +1,12 @@
 {
   "name": "frontend",
   "version": "0.1.0",
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "sharp",
+      "unrs-resolver"
+    ]
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",
