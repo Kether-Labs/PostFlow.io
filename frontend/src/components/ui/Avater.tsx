@@ -42,7 +42,7 @@ const getColorFromName = (name: string): string => {
 const Avater = ({name,size="md",src="",className=""}:AvatarProps) => {
   return (
     <div>
-      <ShadcnAvatar className={cn(sizeClasses[size],className)}>
+      <ShadcnAvatar className={cn(sizeClasses[size], getColorFromName(name), className)}>
         <AvatarImage src={src} alt={name} />
         <AvatarFallback>{getInitials(name)}</AvatarFallback>
         <AvatarBadge className=""/>

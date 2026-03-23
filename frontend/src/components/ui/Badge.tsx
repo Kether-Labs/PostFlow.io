@@ -1,7 +1,8 @@
 
 import { Badge as ShadcnBadge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
-import { cva, VariantProps } from "class-variance-authority"
+// import { cva, VariantProps } from "class-variance-authority"
+import { cva} from "class-variance-authority"
 
 
 interface BadgeProps {
