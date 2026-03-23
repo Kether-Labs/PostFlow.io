@@ -1,4 +1,4 @@
-import { Avatar as ShadcnAvatar,AvatarImage, AvatarFallback,AvatarBadge } from "@/components/ui/avatar";
+import { Avatar as ShadcnAvatar,AvatarImage, AvatarFallback,AvatarBadge } from "@/src/components/ui/shad_ui/avatar";
 import { cn } from "@/lib/utils";
 
 interface AvatarProps {
