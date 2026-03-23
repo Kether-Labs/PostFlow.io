@@ -1,10 +1,10 @@
 # Architecture DDD Hexagonale — PostFlow.io
 
 schema de base de donnée : 
-**MVP**
-https://dbdiagram.io/d/Postflow-MVP-69b8c8b478c6c4bc7afc9205
-**COMPLET**
-https://dbdiagram.io/d/Postflow-io-69b8bc2f78c6c4bc7afc13e9
+# **MVP**
+* https://dbdiagram.io/d/Postflow-MVP-69b8c8b478c6c4bc7afc9205
+# **COMPLET**
+* https://dbdiagram.io/d/Postflow-io-69b8bc2f78c6c4bc7afc13e9
 
 
 > **Une classe = une responsabilité. Le domain ne connaît rien de l'extérieur.**
