@@ -66,10 +66,6 @@ jobs:
         run: pnpm install --frozen-lockfile
         working-directory: frontend
 
-      - name: Generate Prisma Client
-        run: pnpm db:generate
-        working-directory: frontend
-
       - name: Build application
         run: pnpm build
         working-directory: frontend
