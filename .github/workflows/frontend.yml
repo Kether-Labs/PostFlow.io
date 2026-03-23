@@ -10,6 +10,11 @@ on:
   pull_request:
     branches: [main, develop]
 
+# Définit le dossier de travail par défaut
+defaults:
+  run:
+    working-directory: frontend
+
 jobs:
   # Job 1: Linting et Formatage
   lint-and-format:
@@ -19,8 +24,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          path: .
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -55,8 +58,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          path: .
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -88,7 +89,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          path: .
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
