@@ -1,20 +1,8 @@
-const getEnvVar = (key: string, required = true): string => {
-  const value = process.env[key]
-
-  if (!value && required) {
-    throw new Error(
-      `Variable d'environnement manquante : ${key}
-            Vérifie ton fichier .env.local`
-    )
-  }
-
-  return value || ''
-}
-
 const env = {
-  apiUrl: getEnvVar('NEXT_PUBLIC_API_URL'),
-  metaAppId: getEnvVar('NEXT_PUBLIC_META_APP_ID'),
-  appName: getEnvVar('NEXT_PUBLIC_APP_NAME', false), // false = optionnel
+  apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080',
+  useMock: process.env.NEXT_PUBLIC_USE_MOCK === 'true',
+  appName: process.env.NEXT_PUBLIC_APP_NAME || 'PostFlow.io',
+  metaAppId: process.env.NEXT_PUBLIC_META_APP_ID || '',
 }
 
 export default env
