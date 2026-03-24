@@ -1,6 +1,6 @@
 "use client"
 
-import { Alert as ShadcnAlert, AlertDescription, AlertTitle } from "@/src/components/ui/shad_ui/alert"
+import { Alert as ShadcnAlert, AlertDescription, AlertTitle } from "./shad_ui/alert"
 import { cn } from "@/lib/utils"
 import { X, Info, CheckCircle, AlertTriangle, AlertCircle } from "lucide-react"
 import { useState } from "react"
