@@ -1,5 +1,5 @@
 
-import { Badge as ShadcnBadge } from "@/src/components/ui/shad_ui/badge"
+import { Badge as ShadcnBadge } from "./shad_ui/badge"
 import { cn } from "@/lib/utils"
 // import { cva, VariantProps } from "class-variance-authority"
 import { cva} from "class-variance-authority"

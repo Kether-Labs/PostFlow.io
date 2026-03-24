@@ -1,4 +1,4 @@
-import { Avatar as ShadcnAvatar,AvatarImage, AvatarFallback,AvatarBadge } from "@/src/components/ui/shad_ui/avatar";
+import { Avatar as ShadcnAvatar,AvatarImage, AvatarFallback,AvatarBadge } from "./shad_ui/avatar";
 import { cn } from "@/lib/utils";
 
 interface AvatarProps {
@@ -39,7 +39,7 @@ const getColorFromName = (name: string): string => {
   const hash = name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0)
   return colors[hash % colors.length]
 }
-const Avater = ({name,size="md",src="",className=""}:AvatarProps) => {
+const Avatar = ({name,size="md",src="",className=""}:AvatarProps) => {
   return (
     <div>
       <ShadcnAvatar className={cn(sizeClasses[size], getColorFromName(name), className)}>
@@ -52,4 +52,4 @@ const Avater = ({name,size="md",src="",className=""}:AvatarProps) => {
 }
 
 // export default avatar;
-export default Avater;
+export default Avatar;
