@@ -1,4 +1,8 @@
-import { mockLoginResponse, mockRegisterResponse } from '@/mocks/auth.mock'
+import {
+  mockLoginCredentialsByEmail,
+  mockLoginResponsesByEmail,
+  mockRegisterResponse,
+} from '@/mocks/auth.mock'
 import env from '@/config/env'
 import type {
   LoginRequest,
@@ -42,7 +46,17 @@ export const authService = {
         throw new Error('Email ou mot de passe incorrect')
       }
 
-      return mockLoginResponse
+      const expectedPassword = mockLoginCredentialsByEmail[email]
+      if (!expectedPassword || expectedPassword !== password) {
+        throw new Error('Email ou mot de passe incorrect')
+      }
+
+      const response = mockLoginResponsesByEmail[email]
+      if (!response) {
+        throw new Error('Email ou mot de passe incorrect')
+      }
+
+      return response
     }
 
     const res = await fetch(`${env.apiUrl}/api/auth/login`, {
