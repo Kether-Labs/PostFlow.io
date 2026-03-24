@@ -1,0 +1,95 @@
+name: Frontend CI/CD
+
+# Force Node.js 24 pour éviter le warning de dépréciation
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  # Job 1: Linting
+  lint:
+    name: 🔍 Lint Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: frontend
+
+      - name: Run ESLint
+        run: pnpm lint
+        working-directory: frontend
+
+  # Job 2: Build
+  build:
+    name: 🏗️ Build Application
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: frontend
+
+      - name: Build application
+        run: pnpm build
+        working-directory: frontend
+
+  # Job 4: Tests (décommentez quand vous aurez des tests)
+  # test:
+  #   name: 🧪 Run Tests
+  #   runs-on: ubuntu-latest
+  #   needs: lint-and-format
+  #
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #       with:
+  #         path: .
+  #
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '20'
+  #
+  #     - name: Setup pnpm
+  #       uses: pnpm/action-setup@v4
+  #       with:
+  #         version: 9
+  #
+  #     - name: Install dependencies
+  #       run: pnpm install --frozen-lockfile
+  #
+  #     - name: Run tests
+  #       run: pnpm test
