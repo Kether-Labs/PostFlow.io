@@ -1,0 +1,28 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "Question générale ou discussion d'architecture"
+    url: https://github.com/Kether-Labs/PostFlow.io/discussions
+    about: |
+      Pour les questions sur le projet, les discussions d'architecture
+      ou les idées générales — utilisez GitHub Discussions
+      plutôt qu'une Issue.
+
+  - name: "Documentation Frontend — Next.js / React / Tailwind"
+    url: https://nextjs.org/docs
+    about: |
+      Documentation officielle de Next.js 15.
+      Utile pour les questions sur l'App Router, les Server Components,
+      et les optimisations.
+
+  - name: "Documentation Backend — Spring Boot"
+    url: https://docs.spring.io/spring-boot/docs/current/reference/html/
+    about: |
+      Documentation officielle de Spring Boot 3.
+      Utile pour les questions sur la configuration,
+      la sécurité JWT, et JPA.
+
+  - name: "Guide de contribution Kether Labs"
+    url: https://github.com/Kether-Labs/PostFlow.io/blob/main/CONTRIBUTING.md
+    about: |
+      Tout ce qu'il faut savoir pour contribuer à PostFlow.io —
+      workflow Git, conventions de commits, création d'issues et PRs.

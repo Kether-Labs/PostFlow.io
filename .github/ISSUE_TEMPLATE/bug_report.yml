@@ -1,0 +1,144 @@
+name: "Bug report"
+description: "Signaler un bug ou un comportement inattendu sur PostFlow.io"
+title: "fix(scope): "
+labels: ["bug"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de signaler ce bug. Plus votre rapport est précis, plus vite il sera résolu.
+        Vérifiez d'abord que le bug n'a pas déjà été signalé dans les [issues ouvertes](../issues).
+
+  - type: dropdown
+    id: partie
+    attributes:
+      label: "Partie concernée"
+      description: "Le bug se situe côté frontend ou backend ?"
+      options:
+        - "🟩 Frontend — Next.js / TypeScript / React"
+        - "🟦 Backend — Spring Boot / Java"
+        - "🐳 Infrastructure — Docker / CI/CD"
+        - "🔗 Intégration — Connexion frontend ↔ backend"
+        - "📱 Réseaux sociaux — OAuth Facebook / LinkedIn"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: "Module concerné"
+      description: "Quelle fonctionnalité est affectée ?"
+      options:
+        - "Authentification — login / register / logout"
+        - "Dashboard — vue principale"
+        - "Posts — création / édition / suppression"
+        - "Planification — scheduler / date picker"
+        - "Publication — envoi vers les réseaux sociaux"
+        - "Connexion réseaux — OAuth Facebook / LinkedIn"
+        - "Médias — upload images / vidéos"
+        - "Profil utilisateur"
+        - "CI/CD — GitHub Actions"
+        - "Autre"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description du bug"
+      description: "Décrivez clairement ce qui ne fonctionne pas."
+      placeholder: |
+        Exemple : Le bouton "Se connecter" ne répond pas après avoir
+        saisi un email valide et un mot de passe correct.
+        La console affiche une erreur 401 mais le backend retourne
+        bien un token dans les logs.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: "Étapes pour reproduire"
+      description: "Listez les étapes exactes pour reproduire le bug."
+      placeholder: |
+        1. Aller sur http://localhost:3000/login
+        2. Saisir email : test@example.com
+        3. Saisir mot de passe : Test1234
+        4. Cliquer sur "Se connecter"
+        5. Observer l'erreur dans la console
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Comportement attendu"
+      description: "Qu'est-ce qui aurait dû se passer ?"
+      placeholder: |
+        L'utilisateur devrait être redirigé vers /dashboard
+        avec un token JWT valide stocké dans localStorage.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: "Comportement observé"
+      description: "Qu'est-ce qui s'est passé réellement ?"
+      placeholder: |
+        Le bouton passe en état "chargement" pendant 2 secondes
+        puis revient à l'état initial sans message d'erreur visible.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Logs / Messages d'erreur"
+      description: |
+        🟩 Frontend : copiez les erreurs de la console du navigateur (F12)
+        🟦 Backend : copiez les logs Spring Boot du terminal
+      render: shell
+      placeholder: |
+        # Console navigateur (Frontend)
+        POST http://localhost:8080/api/auth/login 401 (Unauthorized)
+        Error: Request failed with status code 401
+
+        # Logs Spring Boot (Backend)
+        2025-01-15 14:32:01 ERROR AuthController - Invalid credentials for user: test@example.com
+    validations:
+      required: false
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: "Environnement"
+      render: shell
+      placeholder: |
+        # Frontend
+        OS           : macOS 14 / Ubuntu 22.04 / Windows 11
+        Node.js      : 18.x
+        pnpm         : 8.x
+        Navigateur   : Chrome 120 / Firefox 121
+        USE_MOCK     : true / false
+
+        # Backend
+        Java         : 17.x
+        Maven        : 3.8.x
+        Spring Boot  : 3.x
+        PostgreSQL   : 15.x
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: "Vérifications avant de soumettre"
+      options:
+        - label: "J'ai vérifié que ce bug n'est pas déjà signalé dans les issues"
+          required: true
+        - label: "J'ai fourni les étapes exactes pour reproduire le bug"
+          required: true
+        - label: "J'ai inclus les logs d'erreur pertinents"
+          required: false

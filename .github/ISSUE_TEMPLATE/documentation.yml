@@ -1,0 +1,92 @@
+name: "Documentation"
+description: "Améliorer ou corriger la documentation de PostFlow.io"
+title: "docs: "
+labels: ["documentation", "good first issue"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        La documentation est aussi importante que le code.
+        Un projet bien documenté est adopté — un projet mal documenté est abandonné.
+        Merci de contribuer à la documentation de PostFlow.io.
+
+  - type: dropdown
+    id: doc_type
+    attributes:
+      label: "Type de contribution"
+      options:
+        - "Correction — faute de frappe, exemple de code incorrect"
+        - "Amélioration — clarifier une explication existante"
+        - "Ajout — nouvelle section manquante"
+        - "Mise à jour — information obsolète"
+        - "Traduction"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: partie
+    attributes:
+      label: "Partie concernée"
+      options:
+        - "🟩 Frontend — guide, composants, hooks"
+        - "🟦 Backend — API, endpoints, architecture"
+        - "🔗 Les deux — documentation générale"
+        - "🐳 Infrastructure — Docker, déploiement, CI/CD"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: fichier
+    attributes:
+      label: "Fichier ou section concernée"
+      options:
+        - "README.md — racine du projet"
+        - "frontend/README.md — guide frontend"
+        - "backend/README.md — guide backend"
+        - "CONTRIBUTING.md — guide de contribution"
+        - "docs/api-reference.md — référence des endpoints"
+        - "docs/environment-variables.md — variables d'environnement"
+        - "docs/getting-started.md — guide de démarrage"
+        - "docs/architecture.md — décisions techniques"
+        - "Commentaires dans le code — JSDoc / Javadoc"
+        - "Autre"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: "Documentation actuelle — ce qui est incorrect ou manquant"
+      description: "Copiez le texte actuel ou décrivez ce qui manque."
+      placeholder: |
+        Section "Installation Frontend" dans README.md :
+        Il est indiqué "npm install" alors que le projet utilise pnpm.
+        Un débutant qui suit ce guide va avoir des erreurs.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed
+    attributes:
+      label: "Amélioration proposée"
+      description: "Montrez la version corrigée ou le contenu à ajouter."
+      placeholder: |
+        Remplacer :
+        npm install
+
+        Par :
+        pnpm install
+        # Note : PostFlow.io utilise pnpm. npm et yarn ne sont pas supportés.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: "Vérifications avant de soumettre"
+      options:
+        - label: "J'ai vérifié que cette correction n'est pas déjà proposée dans les issues"
+          required: true
+        - label: "J'ai testé les exemples de code si j'en ajoute"
+          required: false
