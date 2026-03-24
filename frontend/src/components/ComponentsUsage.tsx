@@ -3,7 +3,7 @@ import Badge from "./ui/Badge";
 import Spinner from "./ui/Spinner";
 
 import Avatar from "./ui/Avater"
-import { Alert } from "./ui/Alert";
+// import { Alert } from "./ui/Alert";
 
 const ComponentsUsage = () => {
     return (
@@ -18,17 +18,17 @@ const ComponentsUsage = () => {
             <Badge variant="published">Publié</Badge>
             <Badge variant="failed">Échec</Badge>
 
-            <Alert variant="error" title="Erreur">
+            {/* <Alert variant="error" title="Erreur">
                 Impossible de charger les données
-            </Alert>
+            </Alert> */}
 
-            <Alert variant="success" dismissible onDismiss={() => console.log('fermé')}>
+            {/* <Alert variant="success" dismissible onDismiss={() => console.log('fermé')}>
                 Compte créé avec succès !
-            </Alert>
+            </Alert> */}
 
-            <Alert variant="info" title="Information">
+            {/* <Alert variant="info" title="Information">
                 Votre abonnement expire dans 3 jours.
-            </Alert>
+            </Alert> */}
         </div>
     );
 }
