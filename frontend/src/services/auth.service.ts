@@ -1,0 +1,106 @@
+import { mockLoginResponse, mockRegisterResponse } from '@/mocks/auth.mock'
+import env from '@/config/env'
+import type {
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+  RegisterResponse,
+} from '@/components/features/auth/types/auth.types'
+
+const MOCK_DELAY_MS = 600
+const mockDelay = () => new Promise<void>(resolve => setTimeout(resolve, MOCK_DELAY_MS))
+
+const getResponseErrorMessage = async (
+  res: Response
+): Promise<string | undefined> => {
+  try {
+    const data = (await res.clone().json()) as { message?: unknown }
+    if (typeof data?.message === 'string') return data.message
+  } catch {
+    void 0
+  }
+
+  try {
+    const text = await res.clone().text()
+    if (!text) return
+    return text
+  } catch {
+    return
+  }
+}
+
+export const authService = {
+  login: async ({ email, password }: LoginRequest): Promise<LoginResponse> => {
+    if (env.useMock) {
+      await mockDelay()
+
+      if (!email.includes('@')) {
+        throw new Error("Format d'email invalide")
+      }
+
+      if (password.length < 6) {
+        throw new Error('Email ou mot de passe incorrect')
+      }
+
+      return mockLoginResponse
+    }
+
+    const res = await fetch(`${env.apiUrl}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    })
+
+    if (!res.ok) {
+      const message =
+        (await getResponseErrorMessage(res)) || 'Email ou mot de passe incorrect'
+      throw new Error(message)
+    }
+
+    return (await res.json()) as LoginResponse
+  },
+
+  register: async ({
+    name,
+    email,
+    password,
+  }: RegisterRequest): Promise<RegisterResponse> => {
+    if (env.useMock) {
+      await mockDelay()
+      return mockRegisterResponse
+    }
+
+    const res = await fetch(`${env.apiUrl}/api/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password }),
+    })
+
+    if (!res.ok) {
+      const message =
+        (await getResponseErrorMessage(res)) ||
+        'Erreur lors de la création du compte'
+      throw new Error(message)
+    }
+
+    return (await res.json()) as RegisterResponse
+  },
+
+  logout: async (): Promise<void> => {
+    if (env.useMock) {
+      await mockDelay()
+      return
+    }
+
+    const token =
+      typeof window === 'undefined' ? null : localStorage.getItem('postflow-auth')
+
+    await fetch(`${env.apiUrl}/api/auth/logout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    })
+  },
+}
