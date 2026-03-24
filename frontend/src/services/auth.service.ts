@@ -5,7 +5,7 @@ import type {
   LoginResponse,
   RegisterRequest,
   RegisterResponse,
-} from '@/components/features/auth/types/auth.types'
+} from '@/features/auth/types/auth.types'
 
 const MOCK_DELAY_MS = 600
 const mockDelay = () => new Promise<void>(resolve => setTimeout(resolve, MOCK_DELAY_MS))

@@ -1,7 +1,7 @@
 import type {
   LoginResponse,
   RegisterResponse,
-} from '@/components/features/auth/types/auth.types'
+} from '@/features/auth/types/auth.types'
 
 export const mockUser = {
   id: 'mock-user-001',
