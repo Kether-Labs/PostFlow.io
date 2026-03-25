@@ -1,9 +1,9 @@
+import env from '@/config/env'
 import {
   mockLoginCredentialsByEmail,
   mockLoginResponsesByEmail,
   mockRegisterResponse,
-} from '@/mocks/auth.mock'
-import env from '@/config/env'
+} from '@/features/auth/mocks/auth.mock'
 import type {
   LoginRequest,
   LoginResponse,
@@ -12,7 +12,9 @@ import type {
 } from '@/features/auth/types/auth.types'
 
 const MOCK_DELAY_MS = 600
-const mockDelay = () => new Promise<void>(resolve => setTimeout(resolve, MOCK_DELAY_MS))
+
+const mockDelay = () =>
+  new Promise<void>(resolve => setTimeout(resolve, MOCK_DELAY_MS))
 
 const getResponseErrorMessage = async (
   res: Response
@@ -100,14 +102,11 @@ export const authService = {
     return (await res.json()) as RegisterResponse
   },
 
-  logout: async (): Promise<void> => {
+  logout: async (token?: string): Promise<void> => {
     if (env.useMock) {
       await mockDelay()
       return
     }
-
-    const token =
-      typeof window === 'undefined' ? null : localStorage.getItem('postflow-auth')
 
     await fetch(`${env.apiUrl}/api/auth/logout`, {
       method: 'POST',
