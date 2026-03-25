@@ -43,10 +43,11 @@ export const useRegister = () => {
 
 export const useLogout = () => {
   const clearAuth = useAuthStore(state => state.clearAuth)
+  const token = useAuthStore(state => state.token)
   const router = useRouter()
 
   return useMutation({
-    mutationFn: authService.logout,
+    mutationFn: () => authService.logout(token || undefined),
     onSuccess: () => {
       clearAuth()
       router.push('/login')

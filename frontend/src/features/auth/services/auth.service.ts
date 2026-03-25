@@ -35,23 +35,6 @@ const getResponseErrorMessage = async (
   }
 }
 
-const getAuthTokenFromStorage = (): string | null => {
-  if (typeof window === 'undefined') return null
-
-  const raw = localStorage.getItem('postflow-auth')
-  if (!raw) return null
-
-  try {
-    const data = JSON.parse(raw) as {
-      state?: { token?: unknown } | undefined
-    }
-    const token = data?.state?.token
-    return typeof token === 'string' && token.length > 0 ? token : null
-  } catch {
-    return null
-  }
-}
-
 export const authService = {
   login: async ({ email, password }: LoginRequest): Promise<LoginResponse> => {
     if (env.useMock) {
@@ -119,13 +102,11 @@ export const authService = {
     return (await res.json()) as RegisterResponse
   },
 
-  logout: async (): Promise<void> => {
+  logout: async (token?: string): Promise<void> => {
     if (env.useMock) {
       await mockDelay()
       return
     }
-
-    const token = getAuthTokenFromStorage()
 
     await fetch(`${env.apiUrl}/api/auth/logout`, {
       method: 'POST',
