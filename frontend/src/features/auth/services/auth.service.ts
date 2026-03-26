@@ -12,10 +12,7 @@ import type {
 } from '@/features/auth/types/auth.types'
 
 const MOCK_DELAY_MS = 600
-<<<<<<< HEAD:frontend/src/services/auth.service.ts
-=======
 
->>>>>>> f22d01380321d6ba9c910c2baaa681bf96dc73a8:frontend/src/features/auth/services/auth.service.ts
 const mockDelay = () =>
   new Promise<void>(resolve => setTimeout(resolve, MOCK_DELAY_MS))
 
@@ -72,8 +69,7 @@ export const authService = {
 
     if (!res.ok) {
       const message =
-        (await getResponseErrorMessage(res)) ||
-        'Email ou mot de passe incorrect'
+        (await getResponseErrorMessage(res)) || 'Email ou mot de passe incorrect'
       throw new Error(message)
     }
 
@@ -112,14 +108,6 @@ export const authService = {
       return
     }
 
-<<<<<<< HEAD:frontend/src/services/auth.service.ts
-    const token =
-      typeof window === 'undefined'
-        ? null
-        : localStorage.getItem('postflow-auth')
-
-=======
->>>>>>> f22d01380321d6ba9c910c2baaa681bf96dc73a8:frontend/src/features/auth/services/auth.service.ts
     await fetch(`${env.apiUrl}/api/auth/logout`, {
       method: 'POST',
       headers: {
