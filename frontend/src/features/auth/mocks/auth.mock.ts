@@ -70,7 +70,9 @@ export const mockLoginResponse3: LoginResponse = {
   token: 'mock-jwt-token-postflow-2025-3',
 }
 
-export const mockLoginResponsesByEmail: Readonly<Record<string, LoginResponse>> = {
+export const mockLoginResponsesByEmail: Readonly<
+  Record<string, LoginResponse>
+> = {
   [mockUser.email]: mockLoginResponse,
   [mockUser2.email]: mockLoginResponse2,
   [mockUser3.email]: mockLoginResponse3,
