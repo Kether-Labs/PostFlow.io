@@ -1,9 +1,30 @@
 import React from 'react'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 import { AuthSidebar } from '@/features/auth/components/AuthSidebar'
 import { LoginForm } from '@/features/auth/components/LoginForm/LoginForm'
 import { Globe } from 'lucide-react'
 
-export default function LoginPage() {
+const getTokenFromAuthCookie = async (): Promise<string | null> => {
+  const cookieStore = await cookies()
+  const cookieValue = cookieStore.get('postflow-auth')?.value
+  if (!cookieValue) return null
+
+  try {
+    const data = JSON.parse(decodeURIComponent(cookieValue)) as {
+      state?: { token?: unknown } | undefined
+    }
+    const token = data?.state?.token
+    return typeof token === 'string' && token.length > 0 ? token : null
+  } catch {
+    return null
+  }
+}
+
+export default async function LoginPage() {
+  const token = await getTokenFromAuthCookie()
+  if (token) redirect('/dashboard')
+
   return (
     <div className="flex min-h-screen w-full bg-white">
       {/* Sidebar - Hidden on mobile */}
