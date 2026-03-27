@@ -1,7 +1,7 @@
 'use client'
 
 import { useMutation } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { authService } from '@/features/auth/services/auth.service'
 import { useAuthStore } from '@/store/auth.store'
 import type {
@@ -12,12 +12,14 @@ import type {
 export const useLogin = () => {
   const setUser = useAuthStore(state => state.setUser)
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirect')
 
   return useMutation({
     mutationFn: (credentials: LoginRequest) => authService.login(credentials),
     onSuccess: data => {
       setUser(data.user, data.token)
-      router.push('/dashboard')
+      router.push(redirectTo || '/dashboard')
     },
     onError: (error: Error) => {
       console.error('Erreur login:', error.message)

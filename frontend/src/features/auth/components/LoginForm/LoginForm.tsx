@@ -8,10 +8,11 @@ import { Eye, EyeOff, Mail, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/shad_ui/input'
 import { loginSchema, type LoginFormData } from '../../types/auth.schemas'
+import { useLogin } from '@/features/auth/hooks/useAuth'
 
 export const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const { mutate, isPending, error } = useLogin()
 
   const {
     register,
@@ -22,10 +23,7 @@ export const LoginForm = () => {
   })
 
   const onSubmit = async (data: LoginFormData) => {
-    setIsLoading(true)
-    // Simulation d'appel API
-    console.log('Données de connexion:', data)
-    setTimeout(() => setIsLoading(false), 1500)
+    mutate(data)
   }
 
   return (
@@ -137,12 +135,18 @@ export const LoginForm = () => {
 
           <Button
             type="submit"
-            disabled={isLoading}
+            disabled={isPending}
             className="w-full cursor-pointer py-6 text-base font-bold bg-[#6366f1] hover:bg-[#4f46e5] text-white rounded-xl shadow-lg shadow-indigo-200 transition-all hover:scale-[1.01] active:scale-[0.99]"
           >
-            {isLoading ? 'Connexion en cours...' : 'Se connecter'}
+            {isPending ? 'Connexion en cours...' : 'Se connecter'}
           </Button>
         </form>
+
+        {error && (
+          <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {error.message}
+          </div>
+        )}
 
         {/* Footer Link */}
         <p className="text-center text-sm text-gray-600">

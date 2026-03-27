@@ -8,8 +8,10 @@ interface AuthState {
   user: User | null
   token: string | null
   isAuthenticated: boolean
+  hasHydrated: boolean
   setUser: (user: User, token: string) => void
   clearAuth: () => void
+  setHasHydrated: (value: boolean) => void
 }
 
 const setAuthCookie = (user: User, token: string) => {
@@ -33,6 +35,7 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       token: null,
       isAuthenticated: false,
+      hasHydrated: false,
       setUser: (user, token) => {
         setAuthCookie(user, token)
         set({ user, token, isAuthenticated: true })
@@ -41,6 +44,7 @@ export const useAuthStore = create<AuthState>()(
         clearAuthCookie()
         set({ user: null, token: null, isAuthenticated: false })
       },
+      setHasHydrated: hasHydrated => set({ hasHydrated }),
     }),
     {
       name: 'postflow-auth',
@@ -50,6 +54,9 @@ export const useAuthStore = create<AuthState>()(
         user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
+      onRehydrateStorage: () => state => {
+        state?.setHasHydrated(true)
+      },
     }
   )
 )
