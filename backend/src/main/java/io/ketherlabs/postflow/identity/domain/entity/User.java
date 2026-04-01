@@ -47,7 +47,6 @@ public class User {
         if (firstname.isBlank() || lastname.isBlank()) {
             throw new IllegalArgumentException("le nom et le prenom doivent être renseigné");
         }
-
         return new User(
                 UUID.randomUUID(),
                 firstname,
