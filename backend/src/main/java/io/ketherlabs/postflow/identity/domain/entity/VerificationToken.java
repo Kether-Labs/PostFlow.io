@@ -49,7 +49,7 @@ public class VerificationToken {
     /**
      * Permet d'affecter un token comme étant utilisé
      */
-    public void usedToken() {
+    public void markAsUsed() {
         if (!this.used)
             this.used = true;
     }

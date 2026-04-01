@@ -58,6 +58,14 @@ public class RefreshToken {
         );
     }
 
+    /**
+     * Marqué un Jeton comme revoquer
+     */
+    public void markAsRevoke() {
+        if (!this.revoked)
+            this.revoked = true;
+    }
+
     public String getTokenHash() {
         return tokenHash;
     }

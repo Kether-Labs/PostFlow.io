@@ -34,11 +34,13 @@ public class PasswordResetToken {
     /** Date et heure de création du token. */
     private final LocalDateTime createdAt;
 
-    private PasswordResetToken(String tokenHash, UUID userId, LocalDateTime expiresAt, LocalDateTime createdAt) {
+    private PasswordResetToken(String tokenHash, UUID userId, LocalDateTime expiresAt, LocalDateTime createdAt,
+                               boolean used) {
         this.tokenHash = tokenHash;
         this.userId = userId;
         this.expiresAt = expiresAt;
         this.createdAt = createdAt;
+        this.used = used;
     }
 
 
@@ -48,19 +50,27 @@ public class PasswordResetToken {
                 tokenHash,
                 userId,
                 expiresAt,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                false
         );
     }
 
-    public static PasswordResetToken reconstruct(String tokenHash, UUID userId, LocalDateTime expiresAt, LocalDateTime createdAt) {
+    public static PasswordResetToken reconstruct(String tokenHash, UUID userId,
+                                                 LocalDateTime expiresAt, LocalDateTime createdAt, boolean used) {
         return new PasswordResetToken(
                 tokenHash,
                 userId,
                 expiresAt,
-                createdAt
+                createdAt,
+                used
         );
     }
 
+
+    public void markAsUsed() {
+        if (!this.used)
+            this.used = true;
+    }
 
     public String getTokenHash() {
         return tokenHash;
