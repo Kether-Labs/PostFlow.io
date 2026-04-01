@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import io.ketherlabs.postflow.identity.domain.entity.enums.UserStatus;
 import io.ketherlabs.postflow.identity.domain.entity.valueobject.*;
-import io.ketherlabs.postflow.identity.exception.AccountNotVerifiedException;
-import io.ketherlabs.postflow.identity.exception.AccountSuspendedException;
+import io.ketherlabs.postflow.identity.domain.exception.AccountNotVerifiedException;
+import io.ketherlabs.postflow.identity.domain.exception.AccountSuspendedException;
 
 public class User {
 
@@ -17,7 +17,7 @@ public class User {
     private Password password;
 
     private UserStatus status;
-    private final Boolean emailVerified;
+    private Boolean emailVerified;
     private final Instant createdAt;
     private Instant lastLoginAt;
 
@@ -35,14 +35,14 @@ public class User {
     }
 
     /**
-     * Methode Factory permettant de cree un nouvelutiliateur
+     * Methode Factory permettant de cree un nouveau compte utilisateur
      * @param firstname le username
      * @param lastname son prenom
      * @param email son email (verifie dans le value object)
      * @param password son mot de passe
      * @return un nouvel utilisateur
      */
-    public static User create(String firstname, String lastname, Email email, Password password) {
+    public static User register(String firstname, String lastname, Email email, Password password) {
 
         if (firstname.isBlank() || lastname.isBlank()) {
             throw new IllegalArgumentException("le nom et le prenom doivent être renseigné");
@@ -53,23 +53,36 @@ public class User {
                 lastname,
                 email,
                 password,
-                UserStatus.PENDING,
+                UserStatus.PENDING_VERIFICATION,
                 false,
                 Instant.now(),
-                Instant.now()
+                null
         );
 
     }
 
     /**
-     * nous permet d'activé le compte si
-     * l'email est vérifier
+     * Nous permettons d'activer le compte si
+     * l'email est vérifié
      */
     public void activate() {
         if (status == UserStatus.SUSPENDED) {
             throw new IllegalStateException("On ne peut pas activé un compte suspendu");
         }
         this.status = UserStatus.ACTIVE;
+        this.emailVerified = true;
+    }
+
+    /**
+     * Nous permettons de suspendre un compte
+     * qui est deja actf
+     */
+    public void suspend () {
+        if (status != UserStatus.ACTIVE) {
+            throw new IllegalStateException("Vous ne pouvez pas suspendre un compte non actif");
+        }
+
+        this.status = UserStatus.SUSPENDED;
     }
 
     /**
@@ -93,7 +106,7 @@ public class User {
      * Utilisé par LoginUseCase avant d'émettre les tokens.
      */
     public void assertCanLogin() {
-        if (this.status == UserStatus.PENDING) {
+        if (this.status == UserStatus.PENDING_VERIFICATION) {
             throw new AccountNotVerifiedException(this.email.getValue());
         }
         if (this.status == UserStatus.SUSPENDED) {
@@ -112,7 +125,7 @@ public class User {
     /**
      * Enregistre la date de dernière connexion.
      */
-    public void recordLogin() {
+    public void updateLastLogin() {
         this.lastLoginAt = Instant.now();
     }
 

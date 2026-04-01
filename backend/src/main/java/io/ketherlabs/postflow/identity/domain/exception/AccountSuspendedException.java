@@ -1,4 +1,4 @@
-package io.ketherlabs.postflow.identity.exception;
+package io.ketherlabs.postflow.identity.domain.exception;
 
 public class AccountSuspendedException extends RuntimeException {
     public AccountSuspendedException(String email) {
