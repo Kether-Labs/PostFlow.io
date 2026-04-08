@@ -6,9 +6,8 @@ import io.ketherlabs.postflow.identity.domain.entity.PasswordResetToken;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
@@ -16,10 +15,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 
-@Data
+
 @Entity
 @Table(name = "password_refresh_token")
-@NoArgsConstructor
+@Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class PasswordResetTokenJpaEntity extends EntityBase {
 
