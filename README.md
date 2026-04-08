@@ -132,7 +132,7 @@ L'équipe frontend change `USE_MOCK=false` et pointe vers l'URL de l'API.
 
 ```
 PostFlow.io
-├── frontend/          Next.js 15 · TypeScript · Tailwind CSS
+├── frontend/          Next.js 16 · TypeScript · Tailwind CSS
 │                      shadcn/ui · TanStack Query · Zustand
 │                      React Hook Form · Zod · Vitest
 │
@@ -199,45 +199,6 @@ postflow-io/                         ← Racine du mono repo
 └── README.md
 ```
 
----
-
-## 🟩 Démarrage Frontend — 3 minutes
-
-> ✅ **Prérequis uniquement : Node.js 18+ et pnpm 8+**
-> ❌ Java, Maven, Docker — **non requis pour le frontend**
-
-```bash
-# 1. Cloner le repo
-git clone https://github.com/Kether-Labs/PostFlow.io.git
-cd PostFlow.io/frontend
-
-# 2. Installer les dépendances
-pnpm install
-
-# 3. Configurer l'environnement
-cp .env.example .env.local
-```
-
-Le fichier `.env.local` est préconfiguré en mode mock :
-
-```bash
-# .env.local — configuration par défaut
-NEXT_PUBLIC_USE_MOCK=true     # ← données fictives, pas besoin de backend
-NEXT_PUBLIC_API_URL=http://localhost:8080
-NEXT_PUBLIC_APP_NAME=PostFlow.io
-```
-
-```bash
-# 4. Lancer le frontend
-pnpm dev
-```
-
-> 🎉 Frontend accessible sur **http://localhost:3000**
->
-> En mode mock tu peux te connecter avec n'importe quel
-> email et mot de passe — les credentials ne sont pas vérifiés.
-
-👉 **[Guide complet Frontend →](frontend/README.md)**
 
 ---
 

@@ -102,11 +102,11 @@ docker --version # Docker 24.x ou supérieur
 # 1. Forkez le projet depuis GitHub (bouton "Fork" en haut à droite)
 
 # 2. Clonez votre fork localement
-git clone https://github.com/Kether-Labs/postflow-io.git
+git clone https://github.com/Kether-Labs/PostFlow.io.git
 cd postflow-io
 
 # 3. Ajoutez le dépôt original comme remote "upstream"
-git remote add upstream https://github.com/Kether-Labs/postflow-io.git
+git remote add upstream https://github.com/Kether-Labs/PostFlow.io.git
 ```
 
 ### 2. Démarrer la base de données avec Docker
