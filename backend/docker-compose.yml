@@ -19,5 +19,11 @@ services:
     restart: always
     ports:
       - "${REDIS_PORT}:6379"
+  mailtrap:
+    image: eaudeweb/mailtrap
+    container_name: postflow_mailtrap
+    ports:
+      - "1025:25"    # SMTP
+      - "1080:80"    # Interface web pour voir les emails
 volumes:
   postgres_data:
