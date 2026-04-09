@@ -1,6 +1,7 @@
 package io.ketherlabs.postflow.identity.domain.entity;
 
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -19,6 +20,8 @@ import java.util.UUID;
  */
 public class PasswordResetToken {
 
+    private final UUID id;
+
     /** Hash sécurisé du token brut. */
     private final String tokenHash;
 
@@ -26,7 +29,7 @@ public class PasswordResetToken {
     private final UUID userId;
 
     /** Date et heure d'expiration du token. */
-    private final LocalDateTime expiresAt;
+    private final Instant expiresAt;
 
     /** Indique si le token a déjà été utilisé. */
     private boolean used;
@@ -34,8 +37,9 @@ public class PasswordResetToken {
     /** Date et heure de création du token. */
     private final LocalDateTime createdAt;
 
-    private PasswordResetToken(String tokenHash, UUID userId, LocalDateTime expiresAt, LocalDateTime createdAt,
+    private PasswordResetToken(UUID id, String tokenHash, UUID userId, Instant expiresAt, LocalDateTime createdAt,
                                boolean used) {
+        this.id = id;
         this.tokenHash = tokenHash;
         this.userId = userId;
         this.expiresAt = expiresAt;
@@ -45,8 +49,9 @@ public class PasswordResetToken {
 
 
     public static PasswordResetToken create(String tokenHash, UUID userId,
-                                            LocalDateTime expiresAt) {
+                                            Instant expiresAt) {
         return new PasswordResetToken(
+                UUID.randomUUID(),
                 tokenHash,
                 userId,
                 expiresAt,
@@ -55,9 +60,10 @@ public class PasswordResetToken {
         );
     }
 
-    public static PasswordResetToken reconstruct(String tokenHash, UUID userId,
-                                                 LocalDateTime expiresAt, LocalDateTime createdAt, boolean used) {
+    public static PasswordResetToken reconstruct(UUID id, String tokenHash, UUID userId,
+                                                 Instant expiresAt, LocalDateTime createdAt, boolean used) {
         return new PasswordResetToken(
+                id,
                 tokenHash,
                 userId,
                 expiresAt,
@@ -72,6 +78,10 @@ public class PasswordResetToken {
             this.used = true;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public String getTokenHash() {
         return tokenHash;
     }
@@ -80,7 +90,7 @@ public class PasswordResetToken {
         return userId;
     }
 
-    public LocalDateTime getExpiresAt() {
+    public Instant getExpiresAt() {
         return expiresAt;
     }
 
