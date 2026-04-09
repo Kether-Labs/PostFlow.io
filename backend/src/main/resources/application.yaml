@@ -5,14 +5,14 @@ spring:
     name: Postflow.io
 
   datasource:
-      url: jdbc:postgresql://localhost:${POSTGRES_PORT}/${POSTGRES_DB}
-      username: ${POSTGRES_USER}
-      password: ${POSTGRES_PASSWORD}
-      driver-class-name: org.postgresql.Driver
-      hikari:
-        connection-timeout: 60000
-        maximum-pool-size: 5
-        idle-timeout: 300000
+    url: jdbc:postgresql://localhost:${POSTGRES_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 60000
+      maximum-pool-size: 5
+      idle-timeout: 300000
 
   jpa:
     hibernate:
@@ -22,12 +22,24 @@ spring:
       hibernate:
         format-sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
+  # flyway config
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
 
+  # redis config
   data:
     redis:
       host: localhost
       port: ${REDIS_PORT}
+      timeout: 2000ms          # timeout connexion — évite de bloquer si Redis est down
+      lettuce:
+        pool:
+          max-active: 8        # connexions actives max
+          max-idle: 4          # connexions inactives max
+          min-idle: 1          # connexions inactives min (warm pool)
+          max-wait: 1000ms
 jwt:
   private-key: ${JWT_PRIVATE_KEY}
   public-key: ${JWT_PUBLIC_KEY}
