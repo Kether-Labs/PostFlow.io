@@ -39,18 +39,20 @@ spring:
           max-idle: 4          # connexions inactives max
           min-idle: 1          # connexions inactives min (warm pool)
           max-wait: 1000ms
-  spring:
-    mail:
-      host: ${SMTP_HOST}
-      port: ${SMTP_PORT}
-      username: ${SMTP_USERNAME}
-      password: ${SMTP_PASSWORD}
-      properties:
-        mail:
-          smtp:
-            auth: true
-            starttls:
-              enable: true    # chiffrement TLS obligatoire
+
+  # Mail server configuration
+  mail:
+    host: ${SMTP_HOST}
+    port: ${SMTP_PORT}
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true    # chiffrement TLS obligatoire
+
 app:
   base-url: ${APP_BASE_URL}
   mail:
@@ -58,3 +60,6 @@ app:
 jwt:
   private-key: ${JWT_PRIVATE_KEY}
   public-key: ${JWT_PUBLIC_KEY}
+
+server:
+  port: ${SERVER_PORT:8080}
