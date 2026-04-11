@@ -1,7 +1,6 @@
 package io.ketherlabs.postflow.identity.domain.entity;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 
@@ -18,16 +17,19 @@ import java.util.UUID;
 public class RefreshToken {
 
 
+    private final UUID id;
+
     /** hash securisé*/
     private final String tokenHash;
-    private final LocalDateTime expriresAt;
+    private final Instant expriresAt;
     /** Identifiant de l'utilisateur propriétaire du token*/
     private final UUID userId;
     /** Indique si le token a été révoqué avant son expiration. */
     private boolean revoked;
-    private final LocalDate createdAt;
+    private final Instant createdAt;
 
-    private RefreshToken(String tokenHash, LocalDateTime expriresAt, UUID userId, boolean revoked, LocalDate createdAt) {
+    private RefreshToken(UUID id, String tokenHash, Instant expriresAt, UUID userId, boolean revoked, Instant createdAt) {
+        this.id = id;
         this.tokenHash = tokenHash;
         this.expriresAt = expriresAt;
         this.userId = userId;
@@ -36,26 +38,26 @@ public class RefreshToken {
     }
 
 
-    public static RefreshToken create(String tokenHash, LocalDateTime expriresAt,
+    public static RefreshToken create(String tokenHash, Instant expriresAt,
                                UUID userId) {
         return new RefreshToken(
+                UUID.randomUUID(),
                 tokenHash,
                 expriresAt,
                 userId,
                 false,
-                LocalDate.now()
-        );
+                Instant.now());
     }
 
-    public static RefreshToken reconstruct(String tokenHash, LocalDateTime expriresAt,
-                               UUID userId, boolean revoked, LocalDate createdAt) {
+    public static RefreshToken reconstruct(UUID id,String tokenHash, Instant expriresAt,
+                               UUID userId, boolean revoked, Instant createdAt) {
         return new RefreshToken(
+                id,
                 tokenHash,
                 expriresAt,
                 userId,
                 revoked,
-                createdAt
-        );
+                createdAt);
     }
 
     /**
@@ -66,11 +68,15 @@ public class RefreshToken {
             this.revoked = true;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public String getTokenHash() {
         return tokenHash;
     }
 
-    public LocalDateTime getExpriresAt() {
+    public Instant getExpriresAt() {
         return expriresAt;
     }
 
@@ -82,7 +88,7 @@ public class RefreshToken {
         return revoked;
     }
 
-    public LocalDate getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 }

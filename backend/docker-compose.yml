@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  postgres :
+    image: postgres:14
+    container_name: postgres_postflow
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER : ${POSTGRES_USER}
+      POSTGRES_PASSWORD : ${POSTGRES_PASSWORD}
+    ports :
+      - "${POSTGRES_PORT}: 5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  redis:
+    image: redis:7.2
+    container_name: postflow_redis
+    restart: always
+    ports:
+      - "${REDIS_PORT}:6379"
+  mailtrap:
+    image: eaudeweb/mailtrap
+    container_name: postflow_mailtrap
+    ports:
+      - "1025:25"    # SMTP
+      - "1080:80"    # Interface web pour voir les emails
+volumes:
+  postgres_data:
