@@ -1,8 +1,6 @@
 package io.ketherlabs.postflow.identity.application.handler;
 
-import io.ketherlabs.postflow.identity.domain.exception.AccountNotVerifiedException;
-import io.ketherlabs.postflow.identity.domain.exception.AccountSuspendedException;
-import io.ketherlabs.postflow.identity.domain.exception.EmailAlreadyExistsException;
+import io.ketherlabs.postflow.identity.domain.exception.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -47,6 +45,27 @@ public class IdentityExceptionHandler {
     public ResponseEntity<ErrorResponse> handleIllegalStateException(IllegalStateException ex) {
         return ResponseEntity.status(409)
                 .body(new ErrorResponse("INVALID_STATE", ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidToken(InvalidTokenException ex) {
+        return ResponseEntity.badRequest().body(
+                new ErrorResponse("INVALID_TOKEN", ex.getMessage())
+        );
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<ErrorResponse> handleTokenExpired(TokenExpiredException ex) {
+        return ResponseEntity.badRequest().body(
+                new ErrorResponse("TOKEN_EXPIRED", ex.getMessage())
+        );
+    }
+
+    @ExceptionHandler(TokenAlreadyUsedException.class)
+    public ResponseEntity<ErrorResponse> handleTokenAlreadyUsed(TokenAlreadyUsedException ex) {
+        return ResponseEntity.badRequest().body(
+                new ErrorResponse("TOKEN_ALREADY_USED", ex.getMessage())
+        );
     }
 
 }

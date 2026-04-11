@@ -112,6 +112,15 @@ public class VerificationToken {
     }
 
     /**
+     * Vérifie si ce token a dépassé sa date d'expiration (TTL 24h).
+     *
+     * @return {@code true} si le token est expiré
+     */
+    public boolean isExpired() {
+        return Instant.now().isAfter(this.expriredAt);
+    }
+
+    /**
      * Vérifie si ce token est encore valide.
      *
      * <p>Un token est valide s'il n'est pas encore utilisé
