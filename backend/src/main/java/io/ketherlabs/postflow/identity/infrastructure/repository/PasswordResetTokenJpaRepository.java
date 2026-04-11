@@ -21,6 +21,6 @@ public interface PasswordResetTokenJpaRepository extends JpaRepository<PasswordR
     // Nettoyage : supprime les tokens expirés ou déjà utilisés
     @Modifying
     @Query("DELETE FROM PasswordResetTokenJpaEntity t " +
-            "WHERE t.expiresAt < :now OR t.used = true")
+            "WHERE t.expireAt < :now OR t.used = true")
     void deleteExpiredOrUsed(@Param("now") Instant now);
 }
