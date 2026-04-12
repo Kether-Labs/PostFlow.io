@@ -1,25 +1,31 @@
 package io.ketherlabs.postflow.identity.domain.usecase;
 
 import io.ketherlabs.postflow.identity.domain.entity.User;
+import io.ketherlabs.postflow.identity.domain.entity.VerificationToken;
 import io.ketherlabs.postflow.identity.domain.entity.valueobject.Email;
 import io.ketherlabs.postflow.identity.domain.entity.valueobject.Password;
 import io.ketherlabs.postflow.identity.domain.event.UserRegisteredEvent;
 import io.ketherlabs.postflow.identity.domain.exception.EmailAlreadyExistsException;
 import io.ketherlabs.postflow.identity.domain.port.UserRepositoryPort;
+import io.ketherlabs.postflow.identity.domain.port.VerificationTokenRepositoryPort;
 import io.ketherlabs.postflow.identity.domain.usecase.input.RegisterCommand;
 import io.ketherlabs.postflow.identity.domain.usecase.output.RegisterResponse;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 
 public class RegisterUseCase {
 
     private final UserRepositoryPort userRepositoryPort;
+    private final VerificationTokenRepositoryPort tokenRepositoryPort;
     private final ApplicationEventPublisher eventPublisher;
 
-    public RegisterUseCase(UserRepositoryPort userRepositoryPort, ApplicationEventPublisher eventPublisher) {
+    public RegisterUseCase(UserRepositoryPort userRepositoryPort, VerificationTokenRepositoryPort tokenRepositoryPort, ApplicationEventPublisher eventPublisher) {
         this.userRepositoryPort = userRepositoryPort;
+        this.tokenRepositoryPort = tokenRepositoryPort;
         this.eventPublisher = eventPublisher;
     }
 
@@ -52,8 +58,15 @@ public class RegisterUseCase {
         // Persiste l'utilisateur via le port
         userRepositoryPort.register(user);
 
+        // creation du token de verification lors de l'inscription
+        VerificationToken token = VerificationToken.create(
+                UUID.randomUUID().toString(),
+                user.getId()
+        );
+        tokenRepositoryPort.save(token);
+
         // Publie un UserRegisteredEvent pour le nouvel utilisateur enregistré
-        eventPublisher.publishEvent(new UserRegisteredEvent(user.getId(), user.getEmail().getValue()));
+        eventPublisher.publishEvent(new UserRegisteredEvent(user.getId(), user.getEmail().getValue(), token.getToken()));
 
         return new RegisterResponse(
                 user.getId(),
