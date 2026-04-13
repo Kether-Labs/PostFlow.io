@@ -7,8 +7,10 @@ import io.ketherlabs.postflow.identity.infrastructure.repository.RefreshTokenJpa
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
+
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Component
@@ -29,6 +31,14 @@ public class RefreshTokenRepositoryAdapter implements RefreshTokenRepositoryPort
     }
 
     @Override
+    public List<RefreshToken> findByUserId(UUID userId) {
+        return jpa.findByUserId(userId)          // List<RefreshTokenJpaEntity>
+                .stream()
+                .map(RefreshTokenJpaEntity::toDomain) // List<RefreshToken>
+                .toList();
+    }
+
+    @Override
     public void revoke(RefreshToken token) {
         token.markAsRevoke();
         jpa.save(RefreshTokenJpaEntity.from(token));
@@ -37,5 +47,10 @@ public class RefreshTokenRepositoryAdapter implements RefreshTokenRepositoryPort
     @Override
     public void deleteExpiredOrRevoked() {
        // jpa.deleteExpiredOrRevoked(Instant.now());
+    }
+
+    @Override
+    public void revokeAllByUserId(UUID userId) {
+
     }
 }

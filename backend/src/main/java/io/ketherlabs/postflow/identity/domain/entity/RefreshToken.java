@@ -61,6 +61,34 @@ public class RefreshToken {
     }
 
     /**
+     * Révoque ce Refresh Token.
+     * Appelée par {@code LogoutUseCase} et {@code ResetPasswordUseCase}.
+     */
+    public void revoke() {
+        if (this.revoked)
+            throw new IllegalStateException("Token is already revoked");
+        this.revoked = true;
+    }
+
+    /**
+     * Vérifie si ce token est encore valide.
+     *
+     * @return {@code true} si non révoqué et non expiré
+     */
+    public boolean isValid() {
+        return !this.revoked && Instant.now().isBefore(this.expriresAt);
+    }
+
+    /**
+     * Vérifie si ce token à dépasser sa date d'expiration.
+     *
+     * @return {@code true} si expiré
+     */
+    public boolean isExpired() {
+        return Instant.now().isAfter(this.expriresAt);
+    }
+
+    /**
      * Marqué un Jeton comme revoquer
      */
     public void markAsRevoke() {
