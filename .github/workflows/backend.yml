@@ -5,34 +5,54 @@
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
 # documentation.
+name: Backend CI
 
-name: PostFlow Backend CI
+env:
+  JAVA_VERSION: '21'
 
 on:
   push:
-    branches: [ develop, main ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ develop, main ]
+    branches: [ main, develop ]
 
 jobs:
-  build:
+
+  test:
+    name: 🧪 Unit Tests
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Java 21
+      - name: Setup Java ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          java-version: ${{ env.JAVA_VERSION }}
           distribution: 'temurin'
           cache: maven
 
-      - name: Run tests
+      - name: Run unit tests
         run: mvn test
-        working-directory: backend  # ← indique le sous-dossier backend
+        working-directory: backend
 
-      - name: Build
+  build:
+    name: 🏗️ Build Application
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build application
         run: mvn package -DskipTests
         working-directory: backend
