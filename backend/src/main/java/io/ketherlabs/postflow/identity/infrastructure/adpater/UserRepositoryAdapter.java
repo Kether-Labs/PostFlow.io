@@ -26,6 +26,16 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     }
 
     @Override
+    public void save(User user) {
+
+    }
+
+    @Override
+    public Optional<User> findById(UUID userId) {
+        return Optional.empty();
+    }
+
+    @Override
     public User findUserById(UUID userid) {
 
         Optional<UserJpaEntity> u = Optional.of(jpa.findById(userid).orElseThrow(
