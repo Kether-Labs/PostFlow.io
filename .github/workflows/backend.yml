@@ -1,0 +1,106 @@
+name: Backend CI
+
+env:
+  JAVA_VERSION: '21'
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+
+  # Job 1 : Tests unitaires
+  test:
+    name: 🧪 Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run unit tests
+        run: mvn test
+        working-directory: backend
+
+  # Job 2 : Build
+  build:
+    name: 🏗️ Build Application
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build application
+        run: mvn package -DskipTests
+        working-directory: backend
+
+  # Job 3 : Tests d'intégration (décommenter quand AuthController sera implémenté — Issue #14)
+  # integration-test:
+  #   name: 🔗 Integration Tests
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #
+  #   services:
+  #     postgres:
+  #       image: postgres:15
+  #       env:
+  #         POSTGRES_DB: postflow_test
+  #         POSTGRES_USER: postflow_user
+  #         POSTGRES_PASSWORD: postflow_secret
+  #       ports:
+  #         - 5432:5432
+  #       options: >-
+  #         --health-cmd pg_isready
+  #         --health-interval 10s
+  #         --health-timeout 5s
+  #         --health-retries 5
+  #
+  #     redis:
+  #       image: redis:7.2
+  #       ports:
+  #         - 6379:6379
+  #       options: >-
+  #         --health-cmd "redis-cli ping"
+  #         --health-interval 10s
+  #         --health-timeout 5s
+  #         --health-retries 5
+  #
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Setup Java
+  #       uses: actions/setup-java@v4
+  #       with:
+  #         java-version: ${{ env.JAVA_VERSION }}
+  #         distribution: 'temurin'
+  #         cache: maven
+  #
+  #     - name: Run integration tests
+  #       run: mvn verify -Pintegration-tests
+  #       working-directory: backend
+  #       env:
+  #         POSTGRES_URL: jdbc:postgresql://localhost:5432/postflow_test
+  #         POSTGRES_USER: postflow_user
+  #         POSTGRES_PASSWORD: postflow_secret
+  #         REDIS_PORT: 6379
+  #         JWT_PRIVATE_KEY: ${{ secrets.JWT_PRIVATE_KEY_TEST }}
+  #         JWT_PUBLIC_KEY: ${{ secrets.JWT_PUBLIC_KEY_TEST }}
