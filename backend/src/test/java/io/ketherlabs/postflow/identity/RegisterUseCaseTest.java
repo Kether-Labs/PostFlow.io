@@ -1,6 +1,7 @@
 package io.ketherlabs.postflow.identity;
 
 import io.ketherlabs.postflow.identity.domain.entity.User;
+import io.ketherlabs.postflow.identity.domain.entity.VerificationToken;
 import io.ketherlabs.postflow.identity.domain.entity.enums.UserStatus;
 import io.ketherlabs.postflow.identity.domain.event.UserRegisteredEvent;
 import io.ketherlabs.postflow.identity.domain.exception.EmailAlreadyExistsException;
@@ -27,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RegisterUseCaseTest {
 
     private FakeUserRepository fakeRepo;
+    private FakeVerificationTokenRepository fakeVerificationTokenRepository;
     private List<Object> publishedEvents;
     private RegisterUseCase useCase;
 
@@ -34,8 +36,9 @@ class RegisterUseCaseTest {
     void setUp() {
         fakeRepo = new FakeUserRepository();
         publishedEvents = new ArrayList<>();
+        fakeVerificationTokenRepository = new FakeVerificationTokenRepository();
         ApplicationEventPublisher eventsPublisher = publishedEvents::add;
-        useCase = new RegisterUseCase(fakeRepo, eventsPublisher);
+        useCase = new RegisterUseCase(fakeRepo,fakeVerificationTokenRepository ,eventsPublisher);
     }
 
     private RegisterCommand validCommand() {
@@ -173,6 +176,51 @@ class RegisterUseCaseTest {
 
         assertEquals(response.userId(), event.userid());
         assertEquals("john@example.com", event.email());
+    }
+
+    // =====================================================
+// 7. Tests du VerificationToken
+// =====================================================
+
+    @Test
+    void should_create_verification_token_after_registration() {
+        RegisterResponse response = useCase.execute(validCommand());
+
+        assertTrue(
+                fakeVerificationTokenRepository.findByUserId(response.userId()).isPresent()
+        );
+    }
+
+    @Test
+    void should_create_non_expired_and_unused_token() {
+        RegisterResponse response = useCase.execute(validCommand());
+
+        VerificationToken token = fakeVerificationTokenRepository
+                .findByUserId(response.userId()).orElseThrow();
+
+        assertFalse(token.isUsed());
+        assertFalse(token.isExpired());
+    }
+
+//    @Test
+//    void should_publish_event_with_verification_token() {
+//        useCase.execute(validCommand());
+//
+//        UserRegisteredEvent event =
+//                (UserRegisteredEvent) publishedEvents.getFirst();
+//
+//        assertNotNull(event.verificationToken());
+//        assertFalse(event.verificationToken().isBlank());
+//    }
+
+    @Test
+    void should_link_token_to_correct_user() {
+        RegisterResponse response = useCase.execute(validCommand());
+
+        VerificationToken token = fakeVerificationTokenRepository
+                .findByUserId(response.userId()).orElseThrow();
+
+        assertEquals(response.userId(), token.getUserid());
     }
 
 }

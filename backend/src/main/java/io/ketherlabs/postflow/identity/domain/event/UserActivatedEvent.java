@@ -1,12 +1,18 @@
 package io.ketherlabs.postflow.identity.domain.event;
 
-import io.ketherlabs.postflow.identity.domain.entity.enums.UserStatus;
+import java.time.Instant;
+import java.util.UUID;
 
+/**
+ * Événement domaine publié après activation du compte utilisateur
+ * suite à la vérification email (UC-AUTH-002).
+ */
 public record UserActivatedEvent(
-        UserStatus status
+        UUID userId,
+        String email,
+        Instant occurredAt
 ) {
-
-    public UserActivatedEvent(UserStatus status) {
-        this.status = status;
+    public UserActivatedEvent(UUID userId, String email) {
+        this(userId, email, Instant.now());
     }
 }

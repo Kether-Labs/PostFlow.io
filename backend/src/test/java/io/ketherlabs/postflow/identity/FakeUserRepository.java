@@ -9,10 +9,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Fake Repository pour les tests unitaires.
- * Implémente UserRepositoryPort en stockant les utilisateurs en mémoire
- * via une Map, sans dépendre d'une base de données réelle.
- * Permet de tester la logique métier de manière isolée et rapide.
+ * Fake repository pour les tests unitaires.
+ * Stocke les utilisateurs en mémoire via une Map.
+ * Aucune dépendance Spring ou base de données.
  */
 public class FakeUserRepository implements UserRepositoryPort {
 
@@ -24,21 +23,31 @@ public class FakeUserRepository implements UserRepositoryPort {
     }
 
     @Override
-    public User findUserById(UUID userid) {
-        return store.get(userid);
+    public void save(User user) {
+        // Même comportement que register — met à jour l'entrée existante
+        store.put(user.getId(), user);
+    }
+
+    @Override
+    public Optional<User> findById(UUID userId) {
+        return Optional.ofNullable(store.get(userId));
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
         return store.values().stream()
-                .filter(user -> user.getEmail().getValue().equals(email))
+                .filter(u -> u.getEmail().getValue().equals(email))
                 .findFirst();
     }
 
     @Override
     public boolean existsByEmail(String email) {
         return store.values().stream()
-                .anyMatch(user -> user.getEmail().getValue().equals(email));
+                .anyMatch(u -> u.getEmail().getValue().equals(email));
+    }
+
+    public User findUserById(UUID userId) {
+        return store.get(userId);
     }
 
     public long count() {
