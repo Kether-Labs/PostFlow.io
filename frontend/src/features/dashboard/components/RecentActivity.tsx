@@ -41,7 +41,7 @@ export const RecentActivity = () => {
     ];
 
     return (
-        <div className="flex w-full flex-col overflow-hidden rounded-[20px] border border-slate-100 bg-white shadow-[0px_4px_16px_rgba(17,17,26,0.02),0px_1px_4px_rgba(17,17,26,0.03)] p-6 md:p-8">
+        <div className="flex w-full flex-col overflow-hidden rounded-[20px] border border-slate-200 bg-white shadow-[0px_4px_16px_rgba(17,17,26,0.02),0px_1px_4px_rgba(17,17,26,0.03)] p-6 md:p-8">
 
             {/* Header */}
             <div className="flex items-center justify-between mb-6">

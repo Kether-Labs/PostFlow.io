@@ -39,7 +39,7 @@ export const StatCards = () => {
             {stats.map((stat) => (
                 <div
                     key={stat.title}
-                    className="flex flex-col justify-between rounded-[14px] border border-slate-100 bg-white p-6 shadow-[0px_4px_16px_rgba(17,17,26,0.02),0px_1px_4px_rgba(17,17,26,0.03)]"
+                    className="flex flex-col justify-between rounded-[14px] border border-slate-200 bg-white p-6 shadow-[0px_4px_16px_rgba(17,17,26,0.02),0px_1px_4px_rgba(17,17,26,0.03)]"
                 >
                     <p className="text-[13px] font-semibold text-slate-500 mb-6">{stat.title}</p>
 

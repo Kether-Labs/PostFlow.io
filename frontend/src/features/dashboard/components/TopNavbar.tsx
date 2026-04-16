@@ -3,14 +3,21 @@
 import React from "react";
 import { Search, Bell, Moon, Menu, ChevronDown } from "lucide-react";
 
-export const TopNavbar = () => {
+interface TopNavbarProps {
+    onToggleSidebar?: () => void;
+}
+
+export const TopNavbar = ({ onToggleSidebar }: TopNavbarProps) => {
     return (
         <header className="sticky top-0 z-50 flex w-full bg-white border-b border-slate-100">
             <div className="flex flex-grow items-center justify-between px-6 py-4 shadow-sm">
 
                 {/* Left Side: Hamburg + Search */}
                 <div className="flex items-center gap-4">
-                    <button className="flex items-center justify-center rounded-md border border-slate-200 bg-white p-2 text-slate-500 hover:bg-slate-50 transition-colors hidden sm:flex">
+                    <button
+                        onClick={onToggleSidebar}
+                        className="flex cursor-pointer items-center justify-center rounded-md border border-slate-200 bg-white p-2 text-slate-500 hover:bg-slate-50 transition-colors hidden sm:flex active:scale-95"
+                    >
                         <Menu size={20} />
                     </button>
 

@@ -22,7 +22,7 @@ export default function DashboardPage() {
                         Filtrer
                     </button>
                     <button className="flex items-center gap-2 rounded-xl bg-[#7B51FA] px-4 py-2.5 text-sm font-bold text-white shadow-[0_4px_14px_rgba(123,81,250,0.39)] transition-all hover:bg-[#6A41E8] hover:shadow-[0_6px_20px_rgba(123,81,250,0.23)] active:scale-[0.98]">
-                        Créer une nouvelle automatisation
+                        Créer un nouveau post
                     </button>
                 </div>
             </div>
