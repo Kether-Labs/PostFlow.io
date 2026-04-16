@@ -1,14 +1,14 @@
-"use client";
-import React, { useState } from "react";
-import { DashboardSidebar } from "@/features/dashboard/components/sidebar";
-import { TopNavbar } from "@/features/dashboard/components/TopNavbar";
+'use client'
+import React, { useState } from 'react'
+import { DashboardSidebar } from '@/features/dashboard/components/sidebar'
+import { TopNavbar } from '@/features/dashboard/components/TopNavbar'
 
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false)
 
   return (
     <div className="flex h-screen bg-[#F4F5F7] p-2 sm:p-4 gap-4 sm:gap-6 overflow-hidden text-slate-900 font-inter">
@@ -20,5 +20,5 @@ export default function DashboardLayout({
         {children}
       </main>
     </div>
-  );
+  )
 }

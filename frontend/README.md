@@ -163,8 +163,8 @@ pnpm run test:coverage    # Tests avec couverture de code
 
 ## 💡 Besoin d'aide ?
 
--  Lire [CONTRIBUTING.md](../CONTRIBUTING.md) complet
--  Consulter [ARCHITECTURE.md](../backend/ARCHITECTURE.md) pour l'intégration backend
--  Signaler un bug / demander une feature via les issues
+- Lire [CONTRIBUTING.md](../CONTRIBUTING.md) complet
+- Consulter [ARCHITECTURE.md](../backend/ARCHITECTURE.md) pour l'intégration backend
+- Signaler un bug / demander une feature via les issues
 
 **Bon code ! 🎉**
