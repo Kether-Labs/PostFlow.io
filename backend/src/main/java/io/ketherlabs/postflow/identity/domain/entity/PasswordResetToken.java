@@ -48,13 +48,12 @@ public class PasswordResetToken {
     }
 
 
-    public static PasswordResetToken create(String tokenHash, UUID userId,
-                                            Instant expiresAt) {
+    public static PasswordResetToken create(String tokenHash, UUID userId) {
         return new PasswordResetToken(
                 UUID.randomUUID(),
                 tokenHash,
                 userId,
-                expiresAt,
+                Instant.now().plusSeconds(3600),
                 LocalDateTime.now(),
                 false
         );
@@ -73,9 +72,35 @@ public class PasswordResetToken {
     }
 
 
+    /**
+     * Marque ce token comme utilisé après reset de mot de passe réussi.
+     *
+     * <p>Appelée par {@code ResetPasswordUseCase} (UC-AUTH-007) — étape 8.
+     *
+     * @throws IllegalStateException si le token est déjà utilisé
+     */
     public void markAsUsed() {
-        if (!this.used)
-            this.used = true;
+        if (this.used)
+            throw new IllegalStateException("Token has already been used");
+        this.used = true;
+    }
+
+    /**
+     * Vérifie si ce token à dépasser sa date d'expiration (TTL 1h).
+     *
+     * @return {@code true} si le token est expiré
+     */
+    public boolean isExpired() {
+        return Instant.now().isAfter(this.expiresAt);
+    }
+
+    /**
+     * Vérifie si ce token est encore utilisable.
+     *
+     * @return {@code true} si non utilisé et non expiré
+     */
+    public boolean isValid() {
+        return !this.used && !isExpired();
     }
 
     public UUID getId() {
