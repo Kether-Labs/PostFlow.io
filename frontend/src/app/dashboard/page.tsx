@@ -41,11 +41,11 @@ export default function DashboardPage() {
             {/* Grid: 2 Columns */}
             <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
                 <div className="flex flex-col gap-5">
-                    <h2 className="text-xl font-bold text-slate-800 font-outfit">Statistiques Récents</h2>
+
                     <RecentPosts />
                 </div>
                 <div className="flex flex-col gap-5">
-                    <h2 className="text-xl font-bold text-slate-800 font-outfit">Historique</h2>
+
                     <RecentActivity />
                 </div>
             </div>

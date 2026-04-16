@@ -1,5 +1,6 @@
 import React from "react";
 import { DashboardSidebar } from "@/features/dashboard/components/sidebar";
+import { TopNavbar } from "@/features/dashboard/components/TopNavbar";
 
 export default function DashboardLayout({
   children,
@@ -12,6 +13,7 @@ export default function DashboardLayout({
         <DashboardSidebar />
       </div>
       <main className="flex-1 flex flex-col min-w-0 bg-white rounded-3xl shadow-[0_2px_20px_rgba(0,0,0,0.02)] border border-gray-100 overflow-y-auto w-full relative">
+        <TopNavbar />
         {children}
       </main>
     </div>
