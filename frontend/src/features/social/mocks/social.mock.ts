@@ -5,6 +5,7 @@ import type { ConnectSocialAccountResponse, DisconnectSocialAccountResponse, Get
 export const mockFacebookAccount: SocialAccount = {
     id: "acc_1234567890",
     platform: "FACEBOOK",
+    userId: mockUser.id,
     platformUserId: "12345678909094667475737646",
     name: "PostFlow",
     avatar: "https://ui-avatars.com/api/?name=PostFlow&background=1877F2&color=fff",
@@ -16,10 +17,11 @@ export const mockFacebookAccount: SocialAccount = {
 export const mockLinkedInAccount: SocialAccount = {
     id: "acc_1234567891",
     platform: "LINKEDIN",
+    userId: mockUser.id,
     platformUserId: "1234567891",
     name: mockUser.name,
     avatar: "https://ui-avatars.com/api/?name=PostFlow&background=0A66C2&color=fff",
-    status: "EXPIRED",
+    status: "CONNECTED",
     connectedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
     expiresAt: new Date(Date.now() + 53 * 24 * 60 * 60 * 1000).toISOString(),
 }
