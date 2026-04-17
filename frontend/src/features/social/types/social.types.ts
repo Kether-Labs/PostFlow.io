@@ -12,6 +12,7 @@ export type SocialAccountStatus =
 export interface SocialAccount {
   id: string
   platform: Platform
+  userId: string
   platformUserId: string // ID de l'utilisateur sur la plateforme
   name: string // Nom de la page ou du profil
   avatar: string | null // URL de la photo de profil
