@@ -69,7 +69,8 @@ export const authService = {
 
     if (!res.ok) {
       const message =
-        (await getResponseErrorMessage(res)) || 'Email ou mot de passe incorrect'
+        (await getResponseErrorMessage(res)) ||
+        'Email ou mot de passe incorrect'
       throw new Error(message)
     }
 

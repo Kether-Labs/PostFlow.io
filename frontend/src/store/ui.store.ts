@@ -15,8 +15,7 @@ interface UIState {
 export const useUIStore = create<UIState>(set => ({
   sidebarOpen: true,
   theme: 'system',
-  toggleSidebar: () =>
-    set(state => ({ sidebarOpen: !state.sidebarOpen })),
+  toggleSidebar: () => set(state => ({ sidebarOpen: !state.sidebarOpen })),
   setSidebarOpen: sidebarOpen => set({ sidebarOpen }),
   setTheme: theme => set({ theme }),
 }))
