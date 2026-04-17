@@ -1,17 +1,18 @@
-// ── Plateformes supportées ───────────────────────────────
+
 export type Platform = 'FACEBOOK' | 'LINKEDIN'
 
-// ── Statut d'un compte connecté ──────────────────────────
+
 export type SocialAccountStatus =
   | 'CONNECTED' // compte actif, token valide
   | 'EXPIRED' // token expiré — reconnexion requise
   | 'ERROR' // erreur lors de la publication
   | 'DISCONNECTED' // déconnecté manuellement
 
-// ── Compte réseau social connecté ────────────────────────
+
 export interface SocialAccount {
   id: string
   platform: Platform
+  userId: string
   platformUserId: string // ID de l'utilisateur sur la plateforme
   name: string // Nom de la page ou du profil
   avatar: string | null // URL de la photo de profil
@@ -36,7 +37,7 @@ export interface DisconnectSocialAccountResponse {
   message: string
 }
 
-// ── Paramètres de requête ────────────────────────────────
+
 export interface ConnectSocialAccountRequest {
   platform: Platform
   redirectUri: string // URL de callback après OAuth
@@ -46,7 +47,7 @@ export interface DisconnectSocialAccountRequest {
   accountId: string
 }
 
-// ── Infos d'affichage par plateforme ─────────────────────
+
 export interface PlatformConfig {
   platform: Platform
   label: string
