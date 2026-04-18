@@ -11,7 +11,6 @@ import io.ketherlabs.postflow.identity.domain.usecase.output.RegisterResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +28,7 @@ class RegisterUseCaseTest {
 
     private FakeUserRepository fakeRepo;
     private FakeVerificationTokenRepository fakeVerificationTokenRepository;
+    private FakePasswordEncoderAdapter fakePasswordEncoder;
     private List<Object> publishedEvents;
     private RegisterUseCase useCase;
 
@@ -37,8 +37,9 @@ class RegisterUseCaseTest {
         fakeRepo = new FakeUserRepository();
         publishedEvents = new ArrayList<>();
         fakeVerificationTokenRepository = new FakeVerificationTokenRepository();
+        fakePasswordEncoder = new FakePasswordEncoderAdapter();
         ApplicationEventPublisher eventsPublisher = publishedEvents::add;
-        useCase = new RegisterUseCase(fakeRepo,fakeVerificationTokenRepository ,eventsPublisher);
+        useCase = new RegisterUseCase(fakeRepo, fakeVerificationTokenRepository, fakePasswordEncoder, eventsPublisher);
     }
 
     private RegisterCommand validCommand() {
@@ -88,29 +89,28 @@ class RegisterUseCaseTest {
     }
 
     // =====================================================
-    // 3. Test du hashage du mot de passe
+    // 3. Test du hashage du mot de passe (via PasswordEncoderPort)
     // =====================================================
 
     @Test
-    void should_hash_password_with_bcrypt() {
+    void should_hash_password_via_encoder_port() {
         useCase.execute(validCommand());
 
         User persisted = fakeRepo.findByEmail("john@example.com").orElseThrow();
         String hash = persisted.getPassword().getHashedValue();
 
         assertNotEquals("securePassword123", hash);
-        assertTrue(hash.startsWith("$2a$12$"));
+        assertEquals("hashed_securePassword123", hash);
     }
 
     @Test
-    void should_use_bcrypt_cost_factor_12() {
+    void should_persist_password_that_matches_via_encoder_port() {
         useCase.execute(validCommand());
 
         User persisted = fakeRepo.findByEmail("john@example.com").orElseThrow();
         String hash = persisted.getPassword().getHashedValue();
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-        assertTrue(encoder.matches("securePassword123", hash));
+        assertTrue(fakePasswordEncoder.matches("securePassword123", hash));
     }
 
     // =====================================================
