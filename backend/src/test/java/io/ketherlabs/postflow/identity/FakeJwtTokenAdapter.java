@@ -1,20 +1,22 @@
 package io.ketherlabs.postflow.identity;
 
 import io.ketherlabs.postflow.identity.domain.entity.User;
+import io.ketherlabs.postflow.identity.domain.exception.InvalidTokenException;
 import io.ketherlabs.postflow.identity.domain.port.JwtTokenPort;
 
+import java.time.Instant;
 import java.util.*;
 
 public class FakeJwtTokenAdapter implements JwtTokenPort {
 
     private final Map<String, TokenPayload> tokens = new HashMap<>();
-    private final Set<String> invalidatedTokens = new HashSet<>();
 
     @Override
     public String generateAccessToken(User user) {
         String jti = UUID.randomUUID().toString();
         String token = "fake-access-token-" + jti;
-        tokens.put(token, new TokenPayload(user.getId(), user.getEmail().getValue(), jti));
+        Instant expiresAt = Instant.now().plusSeconds(900L);
+        tokens.put(token, new TokenPayload(user.getId(), user.getEmail().getValue(), jti, expiresAt));
         return token;
     }
 
@@ -22,7 +24,7 @@ public class FakeJwtTokenAdapter implements JwtTokenPort {
     public String extractJti(String accessToken) {
         TokenPayload payload = tokens.get(accessToken);
         if (payload == null) {
-            throw new IllegalArgumentException("Token inconnu : " + accessToken);
+            throw new InvalidTokenException();
         }
         return payload.jti();
     }
@@ -31,19 +33,23 @@ public class FakeJwtTokenAdapter implements JwtTokenPort {
     public UUID extractUserId(String accessToken) {
         TokenPayload payload = tokens.get(accessToken);
         if (payload == null) {
-            throw new IllegalArgumentException("Token inconnu : " + accessToken);
+            throw new InvalidTokenException();
         }
         return payload.userId();
     }
 
     @Override
     public boolean isValid(String accessToken) {
-        return tokens.containsKey(accessToken) && !invalidatedTokens.contains(accessToken);
+        return tokens.containsKey(accessToken) && tokens.get(accessToken).expiresAt().isAfter(Instant.now());
     }
 
-    public void invalidate(String accessToken) {
-        invalidatedTokens.add(accessToken);
+    @Override
+    public long getRemainingTtlSeconds(String accessToken) {
+        if (!tokens.containsKey(accessToken)) {
+            throw new InvalidTokenException();
+        }
+        return 900L;
     }
 
-    private record TokenPayload(UUID userId, String email, String jti) {}
+    private record TokenPayload(UUID userId, String email, String jti, Instant expiresAt) {}
 }
