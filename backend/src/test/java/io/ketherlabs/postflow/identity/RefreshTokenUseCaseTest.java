@@ -140,7 +140,7 @@ class RefreshTokenUseCaseTest {
                 InvalidRefreshTokenException.class,
                 () -> useCase.execute("unknown-token")
         );
-        assertTrue(ex.getMessage().contains("Invalid refresh token:"));
+        assertTrue(ex.getMessage().contains("Invalid refresh token"));
     }
 
     // =====================================================
