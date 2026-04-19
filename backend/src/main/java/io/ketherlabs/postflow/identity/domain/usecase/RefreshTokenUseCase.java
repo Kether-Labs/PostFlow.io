@@ -68,16 +68,16 @@ public class RefreshTokenUseCase {
         // 2. Hasher et rechercher le token en base
         String tokenHash = passwordEncoder.encode(refreshToken);
         RefreshToken refreshTokenEntity = refreshTokenRepository.findByTokenHash(tokenHash)
-                .orElseThrow(() -> new InvalidRefreshTokenException(refreshToken));
+                .orElseThrow(InvalidRefreshTokenException::new);
 
         // 3. Vérifier TTL 7j
         if (refreshTokenEntity.isExpired()) {
-            throw new RefreshTokenExpiredException(refreshToken);
+            throw new RefreshTokenExpiredException();
         }
 
         // 4. Vérifier que le token n'est pas révoqué
         if (refreshTokenEntity.isRevoked()) {
-            throw new RefreshTokenRevokedException(refreshToken);
+            throw new RefreshTokenRevokedException();
         }
 
         // 5. Révoquer l'ancien token (rotation : usage unique)
@@ -85,7 +85,7 @@ public class RefreshTokenUseCase {
 
         // 6. Charger l'utilisateur associé
         User user = userRepository.findById(refreshTokenEntity.getUserId())
-                .orElseThrow(() -> new InvalidRefreshTokenException(refreshToken));
+                .orElseThrow(InvalidRefreshTokenException::new);
 
         // 7. Générer un nouvel Access Token JWT
         String newAccessToken = jwtTokenPort.generateAccessToken(user);
