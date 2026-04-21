@@ -29,10 +29,40 @@ public class IdentityExceptionHandler {
                 .body(new ErrorResponse("ACCOUNT_SUSPENDED", ex.getMessage()));
     }
 
+    @ExceptionHandler(AccountNotActiveException.class)
+    public ResponseEntity<ErrorResponse> handleAccountNotActiveException(AccountNotActiveException ex) {
+        return ResponseEntity.status(403)
+                .body(new ErrorResponse("ACCOUNT_NOT_ACTIVE", ex.getMessage()));
+    }
+
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex) {
         return ResponseEntity.status(409)
                 .body(new ErrorResponse("EMAIL_ALREADY_EXISTS", ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCredentialsException(InvalidCredentialsException ex) {
+        return ResponseEntity.status(401)
+                .body(new ErrorResponse("INVALID_CREDENTIALS", ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidRefreshTokenException(InvalidRefreshTokenException ex) {
+        return ResponseEntity.status(401)
+                .body(new ErrorResponse("INVALID_REFRESH_TOKEN", ex.getMessage()));
+    }
+
+    @ExceptionHandler(RefreshTokenExpiredException.class)
+    public ResponseEntity<ErrorResponse> handleRefreshTokenExpiredException(RefreshTokenExpiredException ex) {
+        return ResponseEntity.status(401)
+                .body(new ErrorResponse("REFRESH_TOKEN_EXPIRED", ex.getMessage()));
+    }
+
+    @ExceptionHandler(RefreshTokenRevokedException.class)
+    public ResponseEntity<ErrorResponse> handleRefreshTokenRevokedException(RefreshTokenRevokedException ex) {
+        return ResponseEntity.status(401)
+                .body(new ErrorResponse("REFRESH_TOKEN_REVOKED", ex.getMessage()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

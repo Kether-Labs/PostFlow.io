@@ -55,4 +55,16 @@ public interface JwtTokenPort {
      */
     boolean isValid(String accessToken);
 
+    /**
+     * Retourne le temps résiduel du token en secondes ({@code exp - now}).
+     *
+     * <p>Utilisé par {@code LogoutUseCase} (UC-AUTH-005) pour fixer le TTL
+     * Redis de la blacklist, afin que l'entrée expire naturellement en même
+     * temps que le token.
+     *
+     * @param accessToken le JWT à parser
+     * @return les secondes jusqu'à expiration, {@code 0} si déjà expiré
+     */
+    long getRemainingTtlSeconds(String accessToken);
+
 }

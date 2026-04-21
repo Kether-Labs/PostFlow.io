@@ -147,6 +147,22 @@ public class JwtAdapter implements JwtTokenPort {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Calcule {@code exp - now} à partir du claim {@code exp} du JWT.
+     * Retourne {@code 0} si le token est déjà expiré (évite de stocker
+     * une clé Redis avec un TTL négatif).
+     *
+     * @throws JwtException si le token est invalide ou expiré
+     */
+    @Override
+    public long getRemainingTtlSeconds(String accessToken) {
+        Instant expiration = parseClaims(accessToken).getExpiration().toInstant();
+        long remaining = expiration.getEpochSecond() - Instant.now().getEpochSecond();
+        return Math.max(remaining, 0L);
+    }
+
 
     /**
      * Parse et valide un JWT en vérifiant la signature RS256 et l'expiration.

@@ -6,12 +6,12 @@ import io.ketherlabs.postflow.identity.domain.entity.valueobject.Email;
 import io.ketherlabs.postflow.identity.domain.entity.valueobject.Password;
 import io.ketherlabs.postflow.identity.domain.event.UserRegisteredEvent;
 import io.ketherlabs.postflow.identity.domain.exception.EmailAlreadyExistsException;
+import io.ketherlabs.postflow.identity.domain.port.PasswordEncoderPort;
 import io.ketherlabs.postflow.identity.domain.port.UserRepositoryPort;
 import io.ketherlabs.postflow.identity.domain.port.VerificationTokenRepositoryPort;
 import io.ketherlabs.postflow.identity.domain.usecase.input.RegisterCommand;
 import io.ketherlabs.postflow.identity.domain.usecase.output.RegisterResponse;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
@@ -21,11 +21,16 @@ public class RegisterUseCase {
 
     private final UserRepositoryPort userRepositoryPort;
     private final VerificationTokenRepositoryPort tokenRepositoryPort;
+    private final PasswordEncoderPort passwordEncoder;
     private final ApplicationEventPublisher eventPublisher;
 
-    public RegisterUseCase(UserRepositoryPort userRepositoryPort, VerificationTokenRepositoryPort tokenRepositoryPort, ApplicationEventPublisher eventPublisher) {
+    public RegisterUseCase(UserRepositoryPort userRepositoryPort,
+                           VerificationTokenRepositoryPort tokenRepositoryPort,
+                           PasswordEncoderPort passwordEncoder,
+                           ApplicationEventPublisher eventPublisher) {
         this.userRepositoryPort = userRepositoryPort;
         this.tokenRepositoryPort = tokenRepositoryPort;
+        this.passwordEncoder = passwordEncoder;
         this.eventPublisher = eventPublisher;
     }
 
@@ -44,7 +49,7 @@ public class RegisterUseCase {
         }
 
         // Hashage du mot de passe avec BCrypt cost factor 12
-        String hashedPassword = new BCryptPasswordEncoder(12).encode(command.password());
+        String hashedPassword = passwordEncoder.encode(command.password());
 
 
         // Crée l'utilisateur via la méthode factory de l'entité
