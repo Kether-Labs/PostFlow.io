@@ -57,6 +57,13 @@ app:
   base-url: ${APP_BASE_URL}
   mail:
     from: ${MAIL_FROM}
+  cors:
+    allowed-origins: ${FRONTEND_URL:http://localhost:3000}
+  rate-limit:
+    global:
+      max-requests: ${RATE_LIMIT_GLOBAL:100}
+    auth:
+      max-requests: ${RATE_LIMIT_AUTH:10}
 jwt:
   private-key: ${JWT_PRIVATE_KEY}
   public-key: ${JWT_PUBLIC_KEY}
