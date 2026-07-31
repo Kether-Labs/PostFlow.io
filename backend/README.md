@@ -62,11 +62,11 @@ Copier la valeur obtenue dans la variable `AES_SECRET_KEY` du `.env`.
 ### 5. Demarrer les services locaux
 
 ```bash
-docker compose -f docker/docker-compose.yml up -d
+docker compose up -d
 ```
 
 ```bash
-docker compose -f docker/docker-compose.yml ps
+docker compose ps
 ```
 
 ### 6. Compiler
@@ -79,51 +79,13 @@ mvn clean install -DskipTests
 
 ## Configuration
 
-`src/main/resources/application.yml`
+`src/main/resources/application.yaml` charge automatiquement le fichier `.env`
+placé à la racine du backend. Les variables d'environnement du système restent
+prioritaires sur celles du fichier.
 
-```yaml
-spring:
-  datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: false
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-
-  data:
-    redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
-      password: ${REDIS_PASSWORD:}
-
-  mail:
-    host: ${MAIL_HOST}
-    port: ${MAIL_PORT}
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
-
-security:
-  jwt:
-    private-key-path: classpath:keys/private.pem
-    public-key-path: classpath:keys/public.pem
-    access-token-ttl: 900
-    refresh-token-ttl: 604800
-    refresh-token-remember-me-ttl: 2592000
-
-app:
-  base-url: ${APP_BASE_URL}
-  encryption:
-    aes-key: ${AES_SECRET_KEY}
-
-server:
-  port: ${SERVER_PORT:8080}
-```
+Le chargement est configure par
+`spring.config.import: optional:file:./.env[.properties]`. Aucun package dotenv
+supplementaire n'est necessaire.
 
 ---
 
@@ -131,19 +93,20 @@ server:
 
 | Variable | Description | Exemple |
 |---|---|---|
-| `DB_URL` | JDBC URL PostgreSQL | `jdbc:postgresql://localhost:5432/postflow` |
-| `DB_USERNAME` | Utilisateur PostgreSQL | `postflow` |
-| `DB_PASSWORD` | Mot de passe PostgreSQL | `changeme` |
+| `POSTGRES_HOST` | Hote PostgreSQL | `localhost` |
+| `POSTGRES_PORT` | Port PostgreSQL | `5432` |
+| `POSTGRES_DB` | Base PostgreSQL | `postflow` |
+| `POSTGRES_USER` | Utilisateur PostgreSQL | `postflow` |
+| `POSTGRES_PASSWORD` | Mot de passe PostgreSQL | `changeme` |
 | `REDIS_HOST` | Hote Redis | `localhost` |
 | `REDIS_PORT` | Port Redis | `6379` |
-| `REDIS_PASSWORD` | Mot de passe Redis (vide si non configure) | `` |
 | `SERVER_PORT` | Port d'ecoute | `8080` |
-| `MAIL_HOST` | Hote SMTP | `localhost` |
-| `MAIL_PORT` | Port SMTP | `1025` |
-| `MAIL_USERNAME` | Utilisateur SMTP | `` |
-| `MAIL_PASSWORD` | Mot de passe SMTP | `` |
+| `SMTP_HOST` | Hote SMTP | `localhost` |
+| `SMTP_PORT` | Port SMTP | `1025` |
+| `SMTP_USERNAME` | Utilisateur SMTP | `` |
+| `SMTP_PASSWORD` | Mot de passe SMTP | `` |
+| `MAIL_FROM` | Adresse d'expedition | `no-reply@postflow.local` |
 | `APP_BASE_URL` | URL publique du frontend | `http://localhost:3000` |
-| `AES_SECRET_KEY` | Cle AES-256 pour chiffrement tokens OAuth | *(generer avec openssl)* |
 
 ---
 
