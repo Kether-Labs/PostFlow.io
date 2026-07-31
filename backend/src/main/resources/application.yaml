@@ -1,11 +1,15 @@
 spring:
   config:
-    import: optional:file:.env[.properties]
+    # `.env` has no extension, so Spring needs the properties format hint.
+    # The file remains optional for production, where real environment variables
+    # can be supplied by Docker, Kubernetes, or the host system.
+    import: optional:file:./.env[.properties]
+
   application:
     name: Postflow.io
 
   datasource:
-    url: jdbc:postgresql://localhost:${POSTGRES_PORT}/${POSTGRES_DB}
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
@@ -30,8 +34,8 @@ spring:
   # redis config
   data:
     redis:
-      host: localhost
-      port: ${REDIS_PORT}
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
       timeout: 2000ms          # timeout connexion — évite de bloquer si Redis est down
       lettuce:
         pool:
@@ -42,8 +46,8 @@ spring:
 
   # Mail server configuration
   mail:
-    host: ${SMTP_HOST}
-    port: ${SMTP_PORT}
+    host: ${SMTP_HOST:localhost}
+    port: ${SMTP_PORT:1025}
     username: ${SMTP_USERNAME}
     password: ${SMTP_PASSWORD}
     properties:
@@ -58,8 +62,9 @@ app:
   mail:
     from: ${MAIL_FROM}
 jwt:
-  private-key: ${JWT_PRIVATE_KEY}
-  public-key: ${JWT_PUBLIC_KEY}
+  private-key-path: classpath:keys/private.pem
+  public-key-path: classpath:keys/public.pem
+
 
 server:
   port: ${SERVER_PORT:8080}
