@@ -17,6 +17,11 @@ public class IdentityExceptionHandler {
 
     public record ErrorResponse(String errorCode, String errorMessage) {}
 
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCredentials(InvalidCredentialsException ex) {
+        return ResponseEntity.status(401)
+                .body(new ErrorResponse("INVALID_CREDENTIALS", ex.getMessage()));
+    }
     @ExceptionHandler(AccountNotVerifiedException.class)
     public ResponseEntity<ErrorResponse> handleAccountNotVerifiedException(AccountNotVerifiedException ex) {
         return ResponseEntity.status(403)

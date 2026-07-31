@@ -2,6 +2,7 @@ package io.ketherlabs.postflow.identity.domain.usecase;
 
 import io.ketherlabs.postflow.identity.domain.entity.RefreshToken;
 import io.ketherlabs.postflow.identity.domain.entity.User;
+import io.ketherlabs.postflow.identity.domain.entity.enums.UserStatus;
 import io.ketherlabs.postflow.identity.domain.exception.InvalidCredentialsException;
 import io.ketherlabs.postflow.identity.domain.port.*;
 import io.ketherlabs.postflow.identity.domain.usecase.input.LoginCommand;
@@ -37,10 +38,14 @@ public class LoginUseCase {
         User user = userRepositoryPort.findByEmail(command.email())
                 .orElseThrow(InvalidCredentialsException::new);
 
+        if (user.getStatus() != UserStatus.ACTIVE) {
+            throw new InvalidCredentialsException();
+        }
+
         if (!passwordEncoderPort.matches(
                 command.password(),
                 user.getPassword().getHashedValue()
-        )) {
+        ))  {
             throw new InvalidCredentialsException();
         }
 
