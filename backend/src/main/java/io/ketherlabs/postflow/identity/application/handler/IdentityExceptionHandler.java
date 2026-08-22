@@ -2,6 +2,7 @@ package io.ketherlabs.postflow.identity.application.handler;
 
 import io.ketherlabs.postflow.identity.domain.exception.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -44,6 +45,16 @@ public class IdentityExceptionHandler {
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
         return ResponseEntity.status(400)
                 .body(new ErrorResponse("INVALID_ARGUMENT", ex.getMessage()));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleUnreadableRequest(HttpMessageNotReadableException ex) {
+        Throwable cause = ex.getMostSpecificCause();
+        String message = cause instanceof IllegalArgumentException
+                ? cause.getMessage()
+                : "Malformed request body";
+        return ResponseEntity.badRequest()
+                .body(new ErrorResponse("INVALID_REQUEST", message));
     }
 
     @ExceptionHandler(IllegalStateException.class)
