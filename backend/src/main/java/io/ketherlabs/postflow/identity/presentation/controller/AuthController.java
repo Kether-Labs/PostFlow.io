@@ -6,6 +6,9 @@ import io.ketherlabs.postflow.identity.domain.usecase.input.*;
 import io.ketherlabs.postflow.identity.domain.usecase.output.*;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +21,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @RequestMapping("/api/auth")
 @Tag(name = "Authentication", description = "Identity authentication endpoints")
 public class AuthController {
+
+    static final String REFRESH_TOKEN_COOKIE = "refreshToken";
+    private static final long REFRESH_TOKEN_MAX_AGE_SECONDS = 7 * 24 * 60 * 60;
 
     private final RegisterUseCase registerUseCase;
     private final LoginUseCase loginUseCase;
@@ -52,7 +58,8 @@ public class AuthController {
             @ApiResponse(responseCode = "409", description = "Email already exists")
     })
     public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterCommand command) {
-        return ResponseEntity.ok(registerUseCase.execute(command));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(registerUseCase.execute(command));
     }
 
     @PostMapping("/login")
@@ -67,10 +74,8 @@ public class AuthController {
     ) {
         LoginResponse result = loginUseCase.execute(command);
 
-        response.addHeader("Set-Cookie",
-                "refreshToken=" + result.refreshToken() +
-                        "; HttpOnly; Path=/; Max-Age=604800; Secure; SameSite=Strict"
-        );
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie(
+                result.refreshToken(), REFRESH_TOKEN_MAX_AGE_SECONDS).toString());
 
         return ResponseEntity.ok(result);
     }
@@ -78,15 +83,30 @@ public class AuthController {
     @PostMapping("/refresh")
     @Operation(summary = "Generate new access token using refresh token")
     public ResponseEntity<RefreshTokenResponse> refresh(
-            @RequestBody RefreshTokenCommand command
+            @CookieValue(name = REFRESH_TOKEN_COOKIE, required = false) String cookieToken,
+            @RequestBody(required = false) RefreshTokenCommand command
     ) {
-        return ResponseEntity.ok(refreshTokenUseCase.execute(command));
+        String token = cookieToken != null && !cookieToken.isBlank()
+                ? cookieToken
+                : command == null ? null : command.token();
+
+        if (token == null || token.isBlank()) {
+            throw new IllegalArgumentException("Refresh token is required");
+        }
+
+        return ResponseEntity.ok(refreshTokenUseCase.execute(new RefreshTokenCommand(token)));
     }
 
     @PostMapping("/logout")
     @Operation(summary = "Logout user (blacklist JWT)")
-    public ResponseEntity<LogoutResponse> logout(@RequestBody LogoutCommand command) {
-        return ResponseEntity.ok(logoutUseCase.execute(command));
+    public ResponseEntity<LogoutResponse> logout(
+            @RequestBody(required = false) LogoutCommand command,
+            HttpServletResponse response
+    ) {
+        LogoutCommand effectiveCommand = command == null ? new LogoutCommand(null) : command;
+        LogoutResponse result = logoutUseCase.execute(effectiveCommand);
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie("", 0).toString());
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/verify-email")
@@ -100,7 +120,7 @@ public class AuthController {
     @PostMapping("/forgot-password")
     @Operation(summary = "Send password reset email")
     public ResponseEntity<ForgotPasswordResponse> forgotPassword(
-            @RequestBody ForgotPasswordCommand command
+            @Valid @RequestBody ForgotPasswordCommand command
     ) {
         return ResponseEntity.ok(forgotPasswordUseCase.execute(command));
     }
@@ -108,8 +128,18 @@ public class AuthController {
     @PostMapping("/reset-password")
     @Operation(summary = "Reset user password using token")
     public ResponseEntity<ResetPasswordResponse> resetPassword(
-            @RequestBody ResetPasswordCommand command
+            @Valid @RequestBody ResetPasswordCommand command
     ) {
         return ResponseEntity.ok(resetPasswordUseCase.execute(command));
+    }
+
+    private ResponseCookie refreshTokenCookie(String value, long maxAgeSeconds) {
+        return ResponseCookie.from(REFRESH_TOKEN_COOKIE, value)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("Strict")
+                .path("/api/auth")
+                .maxAge(maxAgeSeconds)
+                .build();
     }
 }
