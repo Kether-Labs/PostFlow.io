@@ -6,7 +6,7 @@
 
 | Outil | Version minimale | Verification |
 |---|---|---|
-| Java (JDK) | 21 | `java -version` |
+| Java (JDK) | 25 | `java -version` |
 | Maven | 3.9+ | `mvn -version` |
 | Docker | 24+ | `docker -v` |
 | Docker Compose | 2.x | `docker compose version` |
@@ -117,6 +117,39 @@ mvn spring-boot:run
 ```
 
 Swagger UI : `http://localhost:8080/swagger-ui.html`
+
+## API d'authentification
+
+Toutes les routes sont publiques et préfixées par `/api/auth`.
+
+| Méthode | Route | Entrée | Réponse |
+|---|---|---|---|
+| `POST` | `/register` | `{ firstname, lastname, email, password }` | `201 Created` |
+| `POST` | `/login` | `{ email, password }` | `200 OK`, tokens dans le body et refresh token dans un cookie `HttpOnly` |
+| `POST` | `/refresh` | Cookie `refreshToken` ou `{ token }` | `200 OK` |
+| `POST` | `/logout` | `{ accessToken }` (optionnel) | `200 OK`, suppression du cookie de refresh |
+| `POST` | `/verify-email?token=...` | Query parameter `token` | `200 OK` |
+| `POST` | `/forgot-password` | `{ email }` | `200 OK` avec une réponse anti-énumération |
+| `POST` | `/reset-password` | `{ token, newPassword, confirmPassword }` | `200 OK` |
+
+Le cookie de refresh est limité à `/api/auth`, `HttpOnly`, `Secure`,
+`SameSite=Strict`, et expire après sept jours. Si le cookie et le body sont tous
+les deux fournis à `/refresh`, le cookie est prioritaire.
+
+Les erreurs métier sont retournées sous la forme :
+
+```json
+{
+  "errorCode": "INVALID_TOKEN",
+  "errorMessage": "token is invalid or not found"
+}
+```
+
+Pour exécuter les tests :
+
+```bash
+mvn test
+```
 
 ### Avec un profil Spring
 
