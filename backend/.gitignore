@@ -31,4 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Local environment files ###
 .env
+.env.*
+!.env.example
+
+## Cle ##
+src/main/resources/keys/
