@@ -1,6 +1,7 @@
 package io.ketherlabs.postflow.identity.domain.port;
 
 
+import io.ketherlabs.postflow.core.infrastructure.security.JwtAuthenticationFilter;
 import io.ketherlabs.postflow.identity.domain.entity.User;
 
 import java.util.UUID;
@@ -48,11 +49,23 @@ public interface JwtTokenPort {
      * Valide la signature RS256 et l'expiration d'un Access Token.
      *
      * <p>Ne vérifie PAS la blacklist Redis — cette vérification
-     * est faite séparément par {@code JwtAuthenticationFilter}.
+     * est faite séparément par {@link JwtAuthenticationFilter}.
      *
      * @param accessToken le JWT à valider
      * @return {@code true} si la signature est valide et le token non expiré
      */
     boolean isValid(String accessToken);
+
+    /**
+     * Retourne le temps résiduel du token en secondes ({@code exp - now}).
+     *
+     * <p>Utilisé par {@code LogoutUseCase} (UC-AUTH-005) pour fixer le TTL
+     * Redis de la blacklist, afin que l'entrée expire naturellement en même
+     * temps que le token.
+     *
+     * @param accessToken le JWT à parser
+     * @return les secondes jusqu'à expiration, {@code 0} si déjà expiré
+     */
+    long getRemainingTtlSeconds(String accessToken);
 
 }
